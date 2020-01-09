@@ -20,6 +20,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
 
+  public final DriveTrain driveTrain = new DriveTrain(0, 0, 0, 0, 0); // filler numbers
+
+  private final LambdaJoystick joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
+  private final LambdaJoystick joystick2 = new LambdaJoystick(1);
+
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -68,6 +74,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    joystick1.listen();
+    joystick2.listen();
   }
 
   /**
