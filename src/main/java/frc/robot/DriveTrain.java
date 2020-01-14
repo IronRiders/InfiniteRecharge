@@ -15,10 +15,10 @@ public class DriveTrain {
 
     public DriveTrain(final int leftPort1, final int leftPort2, final int rightPort1, final int rightPort2,
             final int gyroPortNumber) {
-        leftMotor1 = new CANSparkMax(leftPort1, MotorType.kBrushed);
-        leftMotor2 = new CANSparkMax(leftPort2, MotorType.kBrushed);
-        rightMotor1 = new CANSparkMax(rightPort1, MotorType.kBrushed);
-        rightMotor2 = new CANSparkMax(rightPort2, MotorType.kBrushed);
+        leftMotor1 = new CANSparkMax(leftPort1, MotorType.kBrushless);
+        leftMotor2 = new CANSparkMax(leftPort2, MotorType.kBrushless);
+        rightMotor1 = new CANSparkMax(rightPort1, MotorType.kBrushless);
+        rightMotor2 = new CANSparkMax(rightPort2, MotorType.kBrushless);
 
         leftMotor1.setIdleMode(IdleMode.kBrake);
         leftMotor2.setIdleMode(IdleMode.kBrake);
