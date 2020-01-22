@@ -8,10 +8,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Ports.*;
-
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,17 +20,17 @@ import static frc.robot.Ports.*;
  * project.
  */
 public class Robot extends TimedRobot {
-public final DriveTrain driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1,
-      RIGHT_DRIVETAIN_2, GYRO_PORT);
-      private final LambdaJoystick joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
-      private final LambdaJoystick joystick2 = new LambdaJoystick(1);
+  public DriveTrain driveTrain;
+  private LambdaJoystick joystick1;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
   @Override
   public void robotInit() {
-
+    driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
+    joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
   }
 
   /**
@@ -45,8 +44,6 @@ public final DriveTrain driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIV
    */
   @Override
   public void robotPeriodic() {
-    joystick1.listen();
-    joystick2.listen();
   }
 
   /**
@@ -78,7 +75,6 @@ public final DriveTrain driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIV
   @Override
   public void teleopPeriodic() {
     joystick1.listen();
-    joystick2.listen();
   }
 
   /**
