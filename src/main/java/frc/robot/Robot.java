@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 
   public final DriveTrain driveTrain = new DriveTrain(0, 0, 0, 0, 0); // filler numbers
+  public final Shooter shooter = new Shooter(0);
 
   private final LambdaJoystick joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
   private final LambdaJoystick joystick2 = new LambdaJoystick(1);
@@ -32,7 +33,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-
+    joystick1.addButton(0, shooter::shoot, shooter::stop);
   }
 
   /**
