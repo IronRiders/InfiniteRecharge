@@ -1,6 +1,6 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Encoder;
+//import edu.wpi.first.wpilibj.Encoder;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
@@ -15,7 +15,7 @@ public class Shooter {
     public int countsPerRevolution;
     public CANSparkMax shooterMotor;
     public double wheelRadius = 3;
-
+    //This radius is not true
     public Shooter(int portNum) {
         shooterMotor = new CANSparkMax(portNum, MotorType.kBrushless);
         shootEncoder = shooterMotor.getEncoder();
@@ -38,5 +38,12 @@ public class Shooter {
         velocity = (velocity *countsPerRevolution)/ (2 *Math.PI *wheelRadius);
         shooterMotor.set(velocity);
         shooterMotor_PIDcontroller.setReference(velocity, ControlType.kVelocity);
+        /*
+        We could use an if else statement that if the ball count is 0, then call stop.
+        */
+    }
+
+    public void stop(){
+        shooterMotor.set(0);
     }
 }
