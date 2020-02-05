@@ -36,7 +36,6 @@ public class Shooter {
 
     public  void shoot(double velocity) {
         velocity = (velocity *countsPerRevolution)/ (2 *Math.PI *wheelRadius);
-        shooterMotor.set(velocity);
         shooterMotor_PIDcontroller.setReference(velocity, ControlType.kVelocity);
         /*
         We could use an if else statement that if the ball count is 0, then call stop.
