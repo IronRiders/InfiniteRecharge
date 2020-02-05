@@ -7,7 +7,6 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter {
@@ -17,7 +16,6 @@ public class Shooter {
     public int countsPerRevolution;
     public CANSparkMax shooterMotor;
     public double wheelRadius = 0.1016;
-    public double rPM = 8000;
     //this RPM is a estamate from build.
     public Shooter(int portNum) {
         shooterMotor = new CANSparkMax(portNum, MotorType.kBrushed);
@@ -29,6 +27,7 @@ public class Shooter {
         kFF = 0;
         kMaxOutput = 1;
         kMinOutput = -1;
+        //maxRPM = 8000; 
         shooterMotor_PIDcontroller = shooterMotor.getPIDController();
         shooterMotor_PIDcontroller.setP(kP);
         shooterMotor_PIDcontroller.setI(kI);
