@@ -12,6 +12,10 @@ public class Ports{
     public static final int INDEC_MOTOR_2 = 0;
 
     public static double velocity;
+
+
+    public static int shooterVelocity = 4;
+
 }
 
 

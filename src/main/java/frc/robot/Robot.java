@@ -31,8 +31,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
     joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
+
     joystick1.addButton(1, () -> shooter.shoot(velocity));
-    
+   
+    joystick1.addButton(1, () -> shooter.shoot(shooterVelocity));
+
   }
 
   /**
