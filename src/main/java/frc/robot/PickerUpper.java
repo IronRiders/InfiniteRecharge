@@ -7,7 +7,7 @@ public class PickerUpper{
     private final CANSparkMax pickerUpperMotor;
 
     public PickerUpper (int port)  {
-        pickerUpperMotor = new CANSparkMax(port, MotorType.kBrushless);
+        pickerUpperMotor = new CANSparkMax(port, MotorType.kBrushed);
 
     }
 

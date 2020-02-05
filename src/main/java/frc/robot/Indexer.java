@@ -8,8 +8,8 @@ public class Indexer {
         private final CANSparkMax index2;
 
         public Indexer(int port1, int port2){
-            index1 = new CANSparkMax(port1, MotorType.kBrushless);
-            index2 = new CANSparkMax(port2, MotorType.kBrushless);
+            index1 = new CANSparkMax(port1, MotorType.kBrushed);
+            index2 = new CANSparkMax(port2, MotorType.kBrushed);
             
         }
 
