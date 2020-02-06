@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
   private LambdaJoystick joystick1;
   public Shooter shooter;
   public PickerUpper pickerUpper;
+  public Climber climber;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -31,10 +32,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
+    climber = new Climber(PULL_UP, PULL_DOWN);
+    shooter = new Shooter(SHOOTER_PORT);
     joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
     joystick1.addButton(2, pickerUpper::pickUp, pickerUpper::stopPickingUp);
     joystick1.addButton(1, () -> shooter.shoot(shooterVelocity));
-   
+
+    joystick1.addButton(3, climber::pullUp, climber::stopClimbing);
+    joystick1.addButton(4, climber::pullDown, climber::stopClimbing);
 
 
   }
