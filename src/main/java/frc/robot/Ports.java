@@ -10,7 +10,8 @@ public class Ports{
     public static final int SHOOTER_PORT = 0;
     public static final int INDEC_MOTOR_1 = 0;
     public static final int INDEC_MOTOR_2 = 0;
-
+    public static final int CLIMB_UP_MOTOR = 0;
+    public static final int CLIMB_DOWN_MOTOR = 0;
     public static double velocity;
 
 
