@@ -33,13 +33,15 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
     climber = new Climber(PULL_UP, PULL_DOWN);
+    pickerUpper = new PickerUpper(PICKERUPPER, DRAWBRIDGE);
     shooter = new Shooter(SHOOTER_PORT);
     joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
     joystick1.addButton(2, pickerUpper::pickUp, pickerUpper::stopPickingUp);
     joystick1.addButton(1, () -> shooter.shoot(shooterVelocity));
-
     joystick1.addButton(3, climber::pullUp, climber::stopClimbing);
     joystick1.addButton(4, climber::pullDown, climber::stopClimbing);
+    joystick1.addButton(0, pickerUpper::lowerDrawBridge, pickerUpper::stopLowering);
+    joystick1.addButton(0, pickerUpper::raiseDrawBridge, pickerUpper::stopRaising);
 
 
   }
