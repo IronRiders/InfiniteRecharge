@@ -7,34 +7,34 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Climber {
-    public CANSparkMax pullUpMotor;
-    public CANSparkMax pullDownMotor;
+    public CANSparkMax armUpMotor;
+    public CANSparkMax robotUpMotor;
 
     public Climber(int Port1, int Port2){
-        pullUpMotor = new CANSparkMax(Port1, MotorType.kBrushed);
-        pullDownMotor = new CANSparkMax(Port2, MotorType.kBrushed);
-        pullDownMotor.setIdleMode(IdleMode.kBrake);
-        pullUpMotor.setIdleMode(IdleMode.kBrake);
+        armUpMotor = new CANSparkMax(Port1, MotorType.kBrushed);
+        robotUpMotor = new CANSparkMax(Port2, MotorType.kBrushed);
+        robotUpMotor.setIdleMode(IdleMode.kBrake);
+        armUpMotor.setIdleMode(IdleMode.kBrake);
     
     }
 
-    public void pullUp(){
+    public void armUp(){
         // climber up
-        pullDownMotor.setIdleMode(IdleMode.kCoast);
-        pullUpMotor.set(.1);
+        armUpMotor.setIdleMode(IdleMode.kCoast);
+        armUpMotor.set(.1);
         
     }
 
-    public void pullDown(){
+    public void robotUp(){
         // robot up
-        pullDownMotor.set(-.1);
-        pullUpMotor.setIdleMode(IdleMode.kCoast);
+        robotUpMotor.set(-.1);
+        robotUpMotor.setIdleMode(IdleMode.kCoast);
     }
 
     public void stopClimbing(){
-        pullDownMotor.set(0);
+        armUpMotor.set(0);
         pullUpMotor.set(0); 
-        pullDownMotor.setIdleMode(IdleMode.kBrake);
+        armUpMotor.setIdleMode(IdleMode.kBrake);
         pullUpMotor.setIdleMode(IdleMode.kBrake);
     }
     
