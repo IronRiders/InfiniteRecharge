@@ -20,22 +20,23 @@ import static frc.robot.Ports.*;
  * project.
  */
 public class Robot extends TimedRobot {
-  public DriveTrain driveTrain;
-  private LambdaJoystick joystick1;
-  public Shooter shooter;
+  // public DriveTrain driveTrain;
+  // private LambdaJoystick joystick1;
+  // public Shooter shooter;
+  public ImageRec imageRec;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
   @Override
   public void robotInit() {
-    driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
-    joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
+    //driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
+    //joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
 
-    joystick1.addButton(1, () -> shooter.shoot(shooterVelocity));
+    //joystick1.addButton(1, () -> shooter.shoot(shooterVelocity));
    
 
-
+    imageRec = new ImageRec();
   }
 
   /**
@@ -79,7 +80,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    joystick1.listen();
+    //joystick1.listen();
   }
 
   /**
@@ -87,5 +88,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    imageRec.test();
   }
 }

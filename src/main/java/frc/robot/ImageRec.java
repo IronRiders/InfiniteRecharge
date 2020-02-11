@@ -2,14 +2,13 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 
 public class ImageRec {
-    private final double targetX = 0;
-    private final double targetHeight = 100;
-    private final double[] distanceTuning = new double[]{10, 0.1};
-    private final double[] alignmentTuning = new double[]{0, 100};
-    private final double[] powerTuning = new double[]{10, 1000};
+    private final double verticalFieldOfView = 0.75572756611; // radians
+    private final double imageWidth = 1920; // pixels
+    private final double imageHeight = 1080; // pixels
 
     private NetworkTableEntry areaNTE;
     private NetworkTableEntry centerXNTE;
@@ -41,21 +40,24 @@ public class ImageRec {
         heightNTE.setDouble(height);
     }
 
+    public void test() {
+        update();
+
+        SmartDashboard.putNumber("ImageRec/centerX", centerX);
+        SmartDashboard.putNumber("ImageRec/centerY", centerY);
+        SmartDashboard.putNumber("ImageRec/width", width);
+        SmartDashboard.putNumber("ImageRec/height", height);
+    }
+
     // First element is horizontal angle offset, second element is release velocity
     public double[] aim() {
         update();
 
-        // Convert height difference to distance away from target
-        // When testing put distance on the dashboard
-        // If a linear term can't reliably compute the distance, add higher power terms
-        double distanceFromTarget = (targetHeight - height) * distanceTuning[1] + distanceTuning[0];
+        // math
+        // double x = h / (Math.tan((verticalFieldOfView / imageHeight) * (y - imageHeight / 2)));
+        // x = distance to target, h = height from camera height to middle of target in whatever unit (feet, meters), y = center y from grip
+        // credit to eric, joey, issac
 
-        // Do the same for distance that we're off horizontally
-        double horizontalAlignment = (targetX - centerX) * alignmentTuning[1] + alignmentTuning[0];
-
-        // Use the same procedure for converting distance to power
-        double shotPower = distanceFromTarget * powerTuning[1] + powerTuning[0];
-
-        return new double[]{horizontalAlignment, shotPower};
+        return new double[]{};
     }
 }
