@@ -16,6 +16,8 @@ import org.opencv.core.*;
 import org.opencv.imgproc.*;
 // import org.opencv.objdetect.*;
 
+import edu.wpi.first.vision.VisionPipeline;
+
 /**
 * GripPipeline class.
 *
@@ -23,7 +25,7 @@ import org.opencv.imgproc.*;
 *
 * @author GRIP
 */
-public class GripPipeline {
+public class GripPipeline implements VisionPipeline {
 
 	//Outputs
 	private Mat hslThresholdOutput = new Mat();
@@ -41,7 +43,7 @@ public class GripPipeline {
 		// Step HSL_Threshold0:
 		Mat hslThresholdInput = source0;
 		double[] hslThresholdHue = {63.129496402877706, 123.93939393939394};
-		double[] hslThresholdSaturation = {103.19244604316548, 255.0};
+		double[] hslThresholdSaturation = {/*103.19244604316548*/ 0.0, 255.0};
 		double[] hslThresholdLuminance = {160.52158273381295, 255.0};
 		hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance, hslThresholdOutput);
 
