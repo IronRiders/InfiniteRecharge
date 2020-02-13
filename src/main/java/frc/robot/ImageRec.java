@@ -11,7 +11,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.vision.VisionThread;
 
 public class ImageRec {
-    private final double targetHeight = 1.96; // meters TODO is actually 2.5
+    private final double targetHeight = 2.4; // meters TODO is actually 2.5
     private final double cameraHeight = 1.1557; // meters TODO is not final, need camera mounted on robot
     private final double verticalFieldOfView = 0.75572756611; // radians
     private final double imageWidth = 1920; // pixels
@@ -22,8 +22,8 @@ public class ImageRec {
     private double area;
     private double centerX;
     private double centerY;
-    private double width;
-    private double height;
+    private double rectWidth;
+    private double rectHeight;
 
     public ImageRec() {
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
@@ -40,10 +40,10 @@ public class ImageRec {
                 synchronized (lock) {
                     Rect bounds = Imgproc.boundingRect(contour);
                     area = bounds.area();
-                    width = bounds.width;
-                    height = bounds.height;
-                    centerX = bounds.x + width / 2;
-                    centerY = bounds.y + height / 2;
+                    rectWidth = bounds.width;
+                    rectHeight = bounds.height;
+                    centerX = bounds.x + rectWidth / 2;
+                    centerY = bounds.y + rectHeight / 2;
                 }
             }
         });
@@ -54,21 +54,15 @@ public class ImageRec {
         SmartDashboard.putNumber("ImageRec/area", area);
         SmartDashboard.putNumber("ImageRec/centerX", centerX);
         SmartDashboard.putNumber("ImageRec/centerY", centerY);
-        SmartDashboard.putNumber("ImageRec/width", width);
-        SmartDashboard.putNumber("ImageRec/height", height);
+        SmartDashboard.putNumber("ImageRec/width", rectWidth);
+        SmartDashboard.putNumber("ImageRec/height", rectHeight);
         SmartDashboard.putNumber("ImageRec/distance", findDistance());
     }
 
     private double findDistance() {
-        // math
-        // double x = h / (Math.tan((verticalFieldOfView / imageHeight) * (y - imageHeight / 2)));
-        // h = height from camera height to middle of target in whatever unit (feet, meters), y = center y from grip
-        // credit to eric, joey, isaac
-
         double h = targetHeight - cameraHeight;
-        double y = imageHeight / 2 - (centerY - height / 2);
-        SmartDashboard.putNumber("ImageRec/y", y);
-        return h / (Math.tan((verticalFieldOfView / imageHeight) * (y/* - imageHeight / 2*/)));
+        double y = imageHeight / 2 - (centerY - rectHeight / 2);
+        return h / Math.tan(Math.asin(y / (imageHeight/2) * Math.sin(verticalFieldOfView / 2)));
     }
 
     // First element is horizontal angle offset, second element is release velocity
