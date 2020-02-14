@@ -38,8 +38,8 @@ public class Robot extends TimedRobot {
     joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
     joystick1.addButton(2, pickerUpper::pickUp, pickerUpper::stopPickingUp);
     joystick1.addButton(1, () -> shooter.shoot(shooterVelocity));
-    joystick1.addButton(3, climber::pullUp, climber::stopClimbing);
-    joystick1.addButton(4, climber::pullDown, climber::stopClimbing);
+    joystick1.addButton(3, climber::armUp, climber::stopClimbing);
+    joystick1.addButton(4, climber::robotUp, climber::stopClimbing);
     joystick1.addButton(0, pickerUpper::lowerDrawBridge, pickerUpper::stopLowering);
     joystick1.addButton(0, pickerUpper::raiseDrawBridge, pickerUpper::stopRaising);
 

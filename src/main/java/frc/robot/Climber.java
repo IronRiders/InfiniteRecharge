@@ -33,9 +33,9 @@ public class Climber {
 
     public void stopClimbing(){
         armUpMotor.set(0);
-        pullUpMotor.set(0); 
+        robotUpMotor.set(0); 
         armUpMotor.setIdleMode(IdleMode.kBrake);
-        pullUpMotor.setIdleMode(IdleMode.kBrake);
+        robotUpMotor.setIdleMode(IdleMode.kBrake);
     }
     
 }
