@@ -1,7 +1,5 @@
 package frc.robot;
 
-//import edu.wpi.first.wpilibj.Encoder;
-
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
@@ -15,8 +13,10 @@ public class Shooter {
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
     public int countsPerRevolution;
     public CANSparkMax shooterMotor;
+
     public double wheelRadius = 0.1016;
     //this RPM is a estamate from build.
+
     public Shooter(int portNum) {
         shooterMotor = new CANSparkMax(portNum, MotorType.kBrushed);
         shootEncoder = shooterMotor.getEncoder();
@@ -35,8 +35,8 @@ public class Shooter {
         shooterMotor_PIDcontroller.setIZone(kIz);
         shooterMotor_PIDcontroller.setFF(kFF);
         shooterMotor_PIDcontroller.setOutputRange(kMinOutput, kMaxOutput);
-
-        //puts PID numbers into smart dashboard so we can change them
+        
+      //puts PID numbers into smart dashboard so we can change them
         SmartDashboard.putNumber ("P Gain", 0);
         SmartDashboard.putNumber ("I  Gain", 0);
         SmartDashboard.putNumber ("D  Gain", 0);
@@ -60,6 +60,7 @@ public class Shooter {
         /*
         We could use an if else statement that if the ball count is 0, then call stop.
         */
+
     }
 
     public void stop(){
