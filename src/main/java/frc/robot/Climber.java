@@ -1,7 +1,5 @@
 package frc.robot;
 
-import java.security.cert.CertPathValidatorException.BasicReason;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
