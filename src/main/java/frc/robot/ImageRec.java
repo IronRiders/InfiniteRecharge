@@ -12,10 +12,12 @@ import edu.wpi.first.vision.VisionThread;
 
 public class ImageRec {
     private final double targetHeight = 2.4; // meters TODO is actually 2.5
-    private final double cameraHeight = 1.1557; // meters TODO is not final, need camera mounted on robot
-    private final double verticalFieldOfView = 0.75572756611; // radians
-    private final double imageWidth = 1920; // pixels
-    private final double imageHeight = 1080; // pixels
+    private final double cameraHeight = 1.45415; // meters TODO is not final, need camera mounted on robot
+    private final double verticalFieldOfView = 0.75572756611; // radians. This is equal to 43.3 degrees
+    
+    private final double imageWidth = 1920; // camera output in pixels
+    private final double imageHeight = 1080; // camera output in pixels
+    // ^^^ IF LATENCY IS AN ISSUE, please adjust imageWidth and imageHeight to lower values to lower resolution
 
     private VisionThread visionThread;
     private final Object lock = new Object();
@@ -27,7 +29,7 @@ public class ImageRec {
 
     public ImageRec() {
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        camera.setResolution((int) imageWidth, (int) imageHeight);
+        camera.setResolution((int) imageWidth, (int) imageHeight); //Forces the robot to process the HIGHEST POSSIBLE QUALITY image possible.
 
         visionThread = new VisionThread(camera, new GripPipeline(), pipeline -> {
             if (!pipeline.filterContoursOutput().isEmpty()) {
@@ -60,9 +62,14 @@ public class ImageRec {
     }
 
     private double findDistance() {
-        double h = targetHeight - cameraHeight;
-        double y = imageHeight / 2 - (centerY - rectHeight / 2);
-        return h / Math.tan(Math.asin(y / (imageHeight/2) * Math.sin(verticalFieldOfView / 2)));
+        double realHeightDifference = targetHeight - cameraHeight;
+        double heightDifferencePixels = imageHeight / 2  - (centerY - rectHeight / 2); 
+        //double h = targetHeight - cameraHeight;
+        //double y = imageHeight / 2 - (centerY - rectHeight / 2);
+        //return h / Math.tan(Math.asin(y / (imageHeight/2) * Math.sin(verticalFieldOfView / 2)));
+        SmartDashboard.putNumber("ImageRec/angle", heightDifferencePixels * Math.tan(verticalFieldOfView / 2) / (imageHeight / 2) * 180 / Math.PI);
+        //return realHeightDifference / Math.tan(Math.atan2(heightDifferencePixels * Math.tan(verticalFieldOfView / 2), (imageHeight / 2)));
+        return ((imageHeight / 2) * realHeightDifference) / (heightDifferencePixels * Math.tan(verticalFieldOfView / 2));
     }
 
     // First element is horizontal angle offset, second element is release velocity
