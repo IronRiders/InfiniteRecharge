@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
+
 public class Indexer {
     private final CANSparkMax index1;
     private final CANSparkMax index2;
@@ -23,7 +24,7 @@ public class Indexer {
         boolean noBall = false; 
        if (input.get()){
             noBall = true;
-            
+                  
         }
         SmartDashboard.putBoolean ("indexer loaded", noBall);
         return noBall;
