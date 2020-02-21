@@ -1,6 +1,6 @@
 package frc.robot;
 
-import com.revrobotics.CANError;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -32,6 +32,7 @@ public class DriveTrain {
     public double angleGoal;
     private boolean throttleMode = true;
    
+    public boolean rightflare = true;
 
 
     public DriveTrain(final int leftPort1, final int leftPort2, final int rightPort1, final int rightPort2,
@@ -134,9 +135,10 @@ public class DriveTrain {
 
     public void autoUpdateSpeed(double left, double right) {
         leftMotor1.set(left);
-        rightMotor1.set( right);
+        rightMotor1.set(right);
         leftMotor2.follow(leftMotor1);
         rightMotor2.follow(rightMotor1);
+
     }
        
 
@@ -147,8 +149,6 @@ public class DriveTrain {
     public CANSparkMax getRightMotor() {
         return rightMotor1;
     }
-
-  
 
     public void togglethrottleMode() {
         throttleMode = !throttleMode;
@@ -165,6 +165,14 @@ public class DriveTrain {
         SmartDashboard.putBoolean("status/foward", throttleForward);
     }
 
+    public void rightFlareEngager() {
+        throttleDirectionConstant *= -1;
+        throttleForward = !throttleForward;
+        //rightMotor1 *= -1;
+        rightflare = !rightflare;
+        SmartDashboard.putBoolean("status/foward", throttleForward);
+    }
+
     public void stopDriveMotors() {
       stopDriveMotors=true;
 
@@ -175,7 +183,6 @@ public class DriveTrain {
 
     public void setDrivingOffSpeed() {
         drivingOffSpeed = !drivingOffSpeed;
-        // SmartDashboard.putBoolean("DB/String 7", drivingOffSpeed);
     }
 
     public void updateRightSpeed() {
@@ -194,7 +201,7 @@ public class DriveTrain {
     }
 
     public void stopLeftSpeed() {
-        leftMotor1.set( 0);
+        leftMotor1.set(0.0);
         leftMotor2.follow(leftMotor1);
     }
 
@@ -234,5 +241,6 @@ public class DriveTrain {
     {
         leftControlCount++;
     }
+
 
 }
