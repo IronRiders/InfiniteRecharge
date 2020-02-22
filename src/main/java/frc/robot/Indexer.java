@@ -40,4 +40,9 @@ public class Indexer {
         index1.set(-.3);
         index2.set(.3);
     }
+    public void stopExpelling(){
+        index2.set(0);
+        index1.set(0);
+
+    }
 }
