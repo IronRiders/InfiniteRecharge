@@ -1,11 +1,14 @@
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.LambdaJoystick.ThrottlePosition;
 
 public class DriveTrain {
+    private final AHRS gyro;
+
     private final CANSparkMax leftMotor1;
     private final CANSparkMax rightMotor1;
     private final CANSparkMax leftMotor2;
@@ -13,8 +16,8 @@ public class DriveTrain {
 
     public int throttleDirectionConstant = 1;
 
-    public DriveTrain(final int leftPort1, final int leftPort2, final int rightPort1, final int rightPort2,
-            final int gyroPortNumber) {
+    public DriveTrain(final int leftPort1, final int leftPort2, final int rightPort1, final int rightPort2, final int gyroPortNumber) {
+        gyro = new AHRS(); //TODO: Probs shouldn't be deafult constructor
         leftMotor1 = new CANSparkMax(leftPort1, MotorType.kBrushless);
         leftMotor2 = new CANSparkMax(leftPort2, MotorType.kBrushless);
         rightMotor1 = new CANSparkMax(rightPort1, MotorType.kBrushless);
@@ -49,4 +52,16 @@ public class DriveTrain {
         leftMotor1.set(scaledY + scaledX);
         rightMotor1.set(scaledY - scaledX);
     }
+
+	public CANSparkMax getLeftMotor() {
+		return leftMotor1;
+	}
+
+	public CANSparkMax getRightMotor() {
+		return rightMotor1;
+	}
+
+	public AHRS getGyro() {
+		return gyro;
+	}
 }
