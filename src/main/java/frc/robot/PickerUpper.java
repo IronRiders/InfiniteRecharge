@@ -13,7 +13,7 @@ public class PickerUpper{
     private final CANSparkMax drawBridgeMotor;  // The motor that brings down the intake
     private CANPIDController drawBridge_PIDcontroller;
     private CANEncoder drawBridgeEncoder;
-    private double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
+    private double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;// maxRPM;
     public double drawBridgeCountsPerRevolution;
     public double drawBridgeWheelRadius = 0.2342;  // CHANGE ME!
 

@@ -1,6 +1,6 @@
 package frc.robot;
 
-import com.revrobotics.CANEncoder;
+//import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
@@ -8,19 +8,19 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter {
-    public CANEncoder shootEncoder;
+    //private CANEncoder shootEncoder;
     private CANPIDController shooterMotor_PIDcontroller;
-    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
-    public int countsPerRevolution;
-    public CANSparkMax shooterMotor;
+    private double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;// maxRPM;
+    //private int countsPerRevolution;
+    private CANSparkMax shooterMotor;
 
-    public double wheelRadius = 0.1016;
+    //private double wheelRadius = 0.1016;
     //this RPM is a estamate from build.
 
     public Shooter(int portNum) {
         shooterMotor = new CANSparkMax(portNum, MotorType.kBrushed);
-        shootEncoder = shooterMotor.getEncoder();
-        countsPerRevolution = shootEncoder.getCountsPerRevolution();
+        //shootEncoder = shooterMotor.getEncoder();
+        //countsPerRevolution = shootEncoder.getCountsPerRevolution();
         kP = .1;
         kI = .1;
         kD = 0;
@@ -44,7 +44,7 @@ public class Shooter {
     }
 
 
-    public  void shoot(double velocity) {
+    public  void shoot(double rpm) {
        //Updates the pid number from smart dashboard
         double p = SmartDashboard.getNumber("P Gain", 0);
         double i = SmartDashboard.getNumber("I Gain", 0);
@@ -55,8 +55,8 @@ public class Shooter {
         if((d != kD))  { shooterMotor_PIDcontroller.setP(d); kD= d;}
         
         
-        velocity = (velocity *countsPerRevolution)/ (2 *Math.PI *wheelRadius);
-        shooterMotor_PIDcontroller.setReference(velocity, ControlType.kVelocity);
+        //velocity = (velocity *countsPerRevolution)/ (2 *Math.PI *wheelRadius);
+        shooterMotor_PIDcontroller.setReference(rpm, ControlType.kVelocity);
         /*
         We could use an if else statement that if the ball count is 0, then call stop.
         */
