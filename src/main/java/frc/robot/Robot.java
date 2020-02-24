@@ -7,10 +7,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Ports.*;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,6 +30,7 @@ import static frc.robot.Ports.*;
 public class Robot extends TimedRobot {
   public DriveTrain driveTrain;
   private LambdaJoystick joystick1;
+  private LambdaJoystick joystick2;
   public Shooter shooter;
   public Indexer indexer;
   public PickerUpper pickerUpper;
@@ -38,7 +47,9 @@ public class Robot extends TimedRobot {
     pickerUpper = new PickerUpper(PICKERUPPER, DRAWBRIDGE);
     shooter = new Shooter(SHOOTER_PORT);
     joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
-    indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, LINE_BREAKER_PORT);
+    joystick2 = new LambdaJoystick(1);
+    //indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, LINE_BREAKER_PORT);
+    indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2);
     joystick1.addButton(2, pickerUpper::pickUp, pickerUpper::stopPickingUp);
     joystick1.addButton(1, () -> shooter.shoot(shooterVelocity));
     joystick1.addButton(3, climber::armUp, climber::stopClimbing);
@@ -46,6 +57,7 @@ public class Robot extends TimedRobot {
     joystick1.addButton(5, pickerUpper::lowerDrawBridge, pickerUpper::stopLowering);
     joystick1.addButton(6, pickerUpper::raiseDrawBridge, pickerUpper::stopRaising);
     joystick1.addButton(7, indexer::expell, indexer::stopExpelling);
+    joystick2.addButton(1, driveTrain::setThrottleDirectionConstant);
 
 
   }
@@ -77,6 +89,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    String trajectoryJSON = "paths/YourPath.wpilib.json";
+try {
+  Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+  Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+} catch (IOException ex) {
+  DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+}
+
   }
 
   /**

@@ -95,28 +95,37 @@ public class DriveTrain {
          * enabled)
          */
 
-        velocityNeverToExcede = (thrust1 >= 85.00) ? true : false;
-        velocityToTurn = (thrust1 > 20.00) ? true : false;
-        masteralarm = (throttle3 <= 20.00)
-                || ((velocityNeverToExcede == true) || ((revrSpeedWarn == true) && (RvsThrottleWarn == true)));
-        RvsThrottleWarn = ((throttleForward == false) && (throttleMode == true)) ? /* (thrust1 >= 60.00)? */ (true)
-                : (false);
-        revrSpeedWarn = ((throttle3 >= 55.00) && (throttleForward == false) ? (revrSpeedWarn = true)
-                : (revrSpeedWarn = false));
-        SmartDashboard.putBoolean("Alarms/RvsOverSpeed", revrSpeedWarn);
-        SmartDashboard.putBoolean("Alarms/masteralarm", masteralarm);
-        SmartDashboard.putNumber("status/throttlePrime", throttle3);
-        SmartDashboard.putBoolean("Alarms/RvsThrottleWarn",RvsThrottleWarn);
-        SmartDashboard.putNumber("status/thrust", thrust1);
-        SmartDashboard.putNumber("raw data/Xraw", throttlePosition.x);
-        SmartDashboard.putNumber("raw data/Yraw", throttlePosition.y);
-        SmartDashboard.putNumber("raw data/Zraw", throttlePosition.z);
-        SmartDashboard.putBoolean("Alarms/VNE", velocityNeverToExcede);
-        SmartDashboard.putBoolean("Alarms/V1", velocityToTurn);
+        // velocityNeverToExcede = (thrust1 >= 85.00) ? true : false;
+        // velocityToTurn = (thrust1 > 20.00) ? true : false;
+        // masteralarm = (throttle3 <= 20.00)
+        //         || ((velocityNeverToExcede == true) || ((revrSpeedWarn == true) && (RvsThrottleWarn == true)));
+        // RvsThrottleWarn = ((throttleForward == false) && (throttleMode == true)) ? /* (thrust1 >= 60.00)? */ (true)
+        //         : (false);
+        // revrSpeedWarn = ((throttle3 >= 55.00) && (throttleForward == false) ? (revrSpeedWarn = true)
+        //         : (revrSpeedWarn = false));
+        // SmartDashboard.putBoolean("Alarms/RvsOverSpeed", revrSpeedWarn);
+        // SmartDashboard.putBoolean("Alarms/masteralarm", masteralarm);
+        // SmartDashboard.putNumber("status/throttlePrime", throttle3);
+        // SmartDashboard.putBoolean("Alarms/RvsThrottleWarn",RvsThrottleWarn);
+        // SmartDashboard.putNumber("status/thrust", thrust1);
+        // SmartDashboard.putNumber("raw data/Xraw", throttlePosition.x);
+        // SmartDashboard.putNumber("raw data/Yraw", throttlePosition.y);
+        // SmartDashboard.putNumber("raw data/Zraw", throttlePosition.z);
+        // SmartDashboard.putBoolean("Alarms/VNE", velocityNeverToExcede);
+        // SmartDashboard.putBoolean("Alarms/V1", velocityToTurn);
         //SmartDashboard.putBoolean("status/RobotArmed", masterSafteyOff);
         // SmartDashboard.putBoolean("BrakesIndicator",Brakes);
         // SmartDashboard.putNumber
         // VelocityCheck = (Brakes == true)?(speedbrake):throttle2;
+        SmartDashboard.putNumber("Troubleshoot/Xraw", throttlePosition.x);
+        SmartDashboard.putNumber("Troubleshoot/Yraw", throttlePosition.y);
+        SmartDashboard.putNumber("Troubleshoot/Zraw", throttlePosition.w);
+        SmartDashboard.putNumber("Troubleshoot/XScaled", scaledX);
+        SmartDashboard.putNumber("Troubleshoot/YScaled", scaledY);
+        SmartDashboard.putNumber("Troubleshoot/ZScaled", scaledZ);
+        
+
+        SmartDashboard.putBoolean("Alarms/VNE", velocityNeverToExcede);
 
         scaledX = (scaledX * 0.5 * (stopDriveMotors==false ? (throttle2) : 0.00));
         scaledY = scaledY * throttleDirectionConstant * (stopDriveMotors ==false ? (throttle2) : 0.00);
@@ -129,6 +138,9 @@ public class DriveTrain {
         leftMotor2.follow(leftMotor1);
         rightMotor1.set(right);
         rightMotor2.follow(rightMotor1);
+
+        SmartDashboard.putNumber("Troubleshoot/leftMotors", left);
+        SmartDashboard.putNumber("Troubleshoot/rightMotors", right);
     }
 
     // it is now safe to touch stuff
