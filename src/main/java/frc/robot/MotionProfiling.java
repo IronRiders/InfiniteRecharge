@@ -2,9 +2,13 @@ package frc.robot;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
@@ -23,8 +27,8 @@ public class MotionProfiling {
     private DriveTrain driveTrain;
     private final CANSparkMax leftMotor;
     private final CANSparkMax rightMotor;
-    private EncoderFollower left;
-    private EncoderFollower right;
+    private double left;
+    private double right;
 
     //Needs to be updated:
     private final double wheelBaseWidth = 2.25; // Width in feet  
@@ -33,7 +37,7 @@ public class MotionProfiling {
     private final double maxVelocity = 13; //ft/s
 
 
-    public MotionProfiling(DriveTrain driveTrain, String setupLeft , String setupRight) throws IOException {
+    public MotionProfiling(DriveTrain driveTrain, Path setupLeft , Path setupRight) throws IOException {
         this.driveTrain = driveTrain;
         leftMotor = driveTrain.getLeftMotor();
         rightMotor = driveTrain.getRightMotor();
@@ -42,9 +46,13 @@ public class MotionProfiling {
         Trajectory trajectoryRight = TrajectoryUtil.fromPathweaverJson(setupRight);
         // Trajectory trajectoryLeft = PathfinderFRC.getTrajectory(setupRight);
         // Trajectory trajectoryRight = PathfinderFRC.getTrajectory(setupLeft);
-
-        left = new EncoderFollower(trajectoryLeft);
-        right = new EncoderFollower(trajectoryRight);
+        
+        RamseteController controller = new RamseteController();
+        
+        ChassisSpeeds adjustedSpeeds = controller.calculate(currentRobotPose, goal);
+        DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(adjustedSpeeds);
+        left = wheelSpeeds.leftMetersPerSecond;
+        right = wheelSpeeds.rightMetersPerSecond;
 
         left.configureEncoder(leftMotor.getSelectedSensorPosition(), encoderTicksPerRevolution, wheelDiameter); 
         right.configureEncoder(rightMotor.getSelectedSensorPosition(), encoderTicksPerRevolution, wheelDiameter);
