@@ -1,5 +1,4 @@
 package frc.robot;
-
 //import com.fasterxml.jackson.core.util.DefaultIndenter;
 import edu.wpi.first.wpilibj.DigitalInput;
 //import edu.wpi.first.wpilibj.DigitalSource;
@@ -11,34 +10,37 @@ import edu.wpi.first.wpilibj.VictorSP;
 public class Indexer {
     private final VictorSP index1;
     private final VictorSP index2;
-    DigitalInput input;
-
+    DigitalInput beamBreaker;
+    boolean loadingShooter  = false;
+  
+    
     public Indexer(int port1, int port2, int port3){
         index1 = new VictorSP(port1);
         index2 = new VictorSP(port2);
-        input = new DigitalInput(port3);
+        beamBreaker = new DigitalInput(port3);
     }
-    /*
-    public Boolean detectBall() {
-       // we don't know if true is no ball or true is ball
-        boolean noBall = false; 
-       if (input.get()){
-            noBall = true;
-                  
-        }
-        SmartDashboard.putBoolean ("indexer loaded", noBall);
-        return noBall;
+    
+    public void update(){
         
+        if(loadingShooter){
+            if(!beamBreaker.get()){
+            index1.set(0);
+            index2.set(0);
+            loadingShooter = false;
+            }
+        }
     }
-    */
+
+   
     public void feed(){
+        loadingShooter = true;
         index1.set(.3);
         index2.set(-.3);
     }
 
     public void expell(){
-        index1.set(-.3);
-        index2.set(.3);
+        index1.set(-.7);
+        index2.set(.7);
     }
     public void stopExpelling(){
         index2.set(0);

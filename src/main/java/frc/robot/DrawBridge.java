@@ -12,10 +12,10 @@ public class DrawBridge {
     DigitalInput bottomLimitSwitch;
     int directionMoving = 0;
     // -1 is down, 0 is not moving 1 is moving up
-    public DrawBridge(int drawBridgePort){
+    public DrawBridge(int drawBridgePort, int bottom, int top){
         drawBridgeMotor = new TalonSRX(drawBridgePort); // IS IT REALLY BRUSHED???
-        topLimitSwitch = new DigitalInput(1);
-        bottomLimitSwitch = new DigitalInput(2);
+        topLimitSwitch = new DigitalInput(top);
+        bottomLimitSwitch = new DigitalInput(bottom);
         drawBridgeMotor.setNeutralMode(NeutralMode.Coast);
     }
 
