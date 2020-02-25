@@ -11,8 +11,8 @@ public class Indexer {
     private final VictorSP index1;
     private final VictorSP index2;
     DigitalInput beamBreaker;
-    boolean loadingShooter  = false;
-  
+    boolean loadingIndexer  = false;
+    boolean feedingShooter = false;
     
     public Indexer(int port1, int port2, int port3){
         index1 = new VictorSP(port1);
@@ -22,20 +22,35 @@ public class Indexer {
     
     public void update(){
         
-        if(loadingShooter){
+        if(loadingIndexer){
             if(!beamBreaker.get()){
             index1.set(0);
             index2.set(0);
-            loadingShooter = false;
+            loadingIndexer = false;
+            }
+        }
+
+        if(feedingShooter){
+            if(beamBreaker.get()){
+                index1.set(0);
+                index2.set(0);
+                feedingShooter = false;
             }
         }
     }
 
    
-    public void feed(){
-        loadingShooter = true;
+    public void loadIndexer(){
+        loadingIndexer = true;
         index1.set(.3);
         index2.set(-.3);
+    }
+
+    public void feedShooter(){
+        feedingShooter = true;
+        index1.set(.3);
+        index2.set(-.3);
+
     }
 
     public void expell(){
