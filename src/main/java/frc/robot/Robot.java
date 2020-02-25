@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
+    driveTrain = new DriveTrain(0, 0, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
     climber = new Climber(RAISE_HOOK, WINCH_UP);
     pickerUpper = new PickerUpper(PICKERUPPER, DRAWBRIDGE);
     shooter = new Shooter(SHOOTER_PORT);
