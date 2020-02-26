@@ -53,6 +53,12 @@ public class DriveTrain {
         rightMotor1.set(scaledY - scaledX);
     }
 
+    public void autoUpdateSpeed(double left, double right) {
+        
+        leftMotor1.set(left);
+        rightMotor1.set(right);
+    }
+
 	public CANSparkMax getLeftMotor() {
 		return leftMotor1;
 	}
