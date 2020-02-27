@@ -1,18 +1,26 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.LambdaJoystick.ThrottlePosition;
 
+
 public class DriveTrain {
-    private final CANSparkMax leftMotor1;
-    private final CANSparkMax rightMotor1;
-    private final CANSparkMax leftMotor2;
-    private final CANSparkMax rightMotor2;
+
+    private final VictorSPX leftMotor1;
+    private final VictorSPX rightMotor1;
+    private final VictorSPX leftMotor2;
+    private final VictorSPX rightMotor2;
+    private final Encoder enco;
+ 
+
+    private boolean throttleMode = true;// formally slowSpeed, side not we're calling the default spped baby mode,
+                                        // outreach mode, or rookie mode
     public double autoValue;//the hell does this do?
     private boolean drivingOffSpeed;
     public int throttleDirectionConstant = 1;
@@ -30,25 +38,73 @@ public class DriveTrain {
     boolean rushing = false;
     public boolean masterSafteyOff = true;
     public double angleGoal;
-    private boolean throttleMode = true;
-   
-    public boolean rightflare = true;
 
-
-    public DriveTrain(final int leftPort1, final int leftPort2, final int rightPort1, final int rightPort2,
-            final int gyroPortNumber) {
-        leftMotor1 = new CANSparkMax(leftPort1, MotorType.kBrushless);
-        leftMotor2 = new CANSparkMax(leftPort2, MotorType.kBrushless);
-        rightMotor1 = new CANSparkMax(rightPort1, MotorType.kBrushless);
-        rightMotor2 = new CANSparkMax(rightPort2, MotorType.kBrushless);
-
-        leftMotor1.setIdleMode(IdleMode.kBrake);
-        leftMotor2.setIdleMode(IdleMode.kBrake);
-        rightMotor1.setIdleMode(IdleMode.kBrake);
-        rightMotor2.setIdleMode(IdleMode.kBrake);
-        leftMotor2.follow(leftMotor1);
-        rightMotor2.follow(rightMotor1);
+    public DriveTrain(final int leftPort1, final int leftPort2, final int rightPort1, final int rightPort2, final int gyroPortNumber) {
+        leftMotor1 = new VictorSPX(leftPort1);
+        leftMotor2 = new VictorSPX(leftPort2);
+        rightMotor1 = new VictorSPX(rightPort1);
+        rightMotor2 = new VictorSPX(rightPort2);
+        leftMotor1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        rightMotor1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+       
         
+        
+  
+        enco = new Encoder(8, 9);
+        enco.setDistancePerPulse(2.0943 / 4);
+
+        // if (braketoggler == true) {
+        //     rightMotor1.setNeutralMode(NeutralMode.Brake);
+        //     rightMotor2.setNeutralMode(NeutralMode.Brake);
+        //     leftMotor1.setNeutralMode(NeutralMode.Brake);
+        //     leftMotor2.setNeutralMode(NeutralMode.Brake);
+        // } else {
+        //     rightMotor1.setNeutralMode(NeutralMode.Coast);
+        //     rightMotor2.setNeutralMode(NeutralMode.Coast);
+        //     leftMotor1.setNeutralMode(NeutralMode.Coast);
+        //     leftMotor2.setNeutralMode(NeutralMode.Coast);
+        // }
+
+        // gyro.reset();
+        drivingOffSpeed = false;
+        // SmartDashboard.putNumber("status/gyroprime", gyro.getAngle());
+      //  SmartDashboard.putBoolean("status/throttleMode", throttleMode);
+        SmartDashboard.putBoolean("status/foward", throttleForward);
+        SmartDashboard.putNumber("status/throttle", 0);
+        // gyroPortNumber should be analong 0 or 1
+
+
+    }
+
+    // Code from here till next commment is setting up for lame drive imitiation,
+    // but does nothin aon
+    // public double getDistance() {
+    //     return enco.getRaw() * -0.0002661;
+    // }
+
+    public void toggleBrakesMode() {
+        braketoggler = !braketoggler;
+    }
+
+    public void armMasterSaftey() {
+        masterSafteyOff = true;
+    }
+
+    public void disarmMasterSaftey() {
+        masterSafteyOff = false;
+    }
+
+    public void reset() {
+        enco.reset();
+
+    }
+    // Normal code resumes after this
+
+    public void makeVictorsFollowers() {
+        leftMotor2.set(ControlMode.Follower, leftMotor1.getDeviceID());
+        leftMotor2.setInverted(InvertType.FollowMaster);
+        rightMotor2.set(ControlMode.Follower, rightMotor2.getDeviceID());
+        rightMotor2.setInverted(InvertType.FollowMaster);
     }
 
     public void updateSpeed(final ThrottlePosition throttlePosition) {
@@ -64,14 +120,6 @@ public class DriveTrain {
                 + (scaleFactorD * throttlePosition.y * throttlePosition.y);
         scaledX = (scaleFactorA * Math.abs(throttlePosition.x))
                 + (scaleFactorB * throttlePosition.x * throttlePosition.x);
-        if (throttlePosition.x < 0)
-            scaledX = -scaledX;
-        if (throttlePosition.y < 0)
-            scaledY = -scaledY;
-
-        leftMotor1.set(scaledY + scaledX);
-        rightMotor1.set(scaledY - scaledX);
-
         autoValue = scaledY;
         if (throttlePosition.x < 0) {
             scaledX = -scaledX;
@@ -95,71 +143,74 @@ public class DriveTrain {
          * enabled)
          */
 
-        // velocityNeverToExcede = (thrust1 >= 85.00) ? true : false;
-        // velocityToTurn = (thrust1 > 20.00) ? true : false;
-        // masteralarm = (throttle3 <= 20.00)
-        //         || ((velocityNeverToExcede == true) || ((revrSpeedWarn == true) && (RvsThrottleWarn == true)));
-        // RvsThrottleWarn = ((throttleForward == false) && (throttleMode == true)) ? /* (thrust1 >= 60.00)? */ (true)
-        //         : (false);
-        // revrSpeedWarn = ((throttle3 >= 55.00) && (throttleForward == false) ? (revrSpeedWarn = true)
-        //         : (revrSpeedWarn = false));
-        // SmartDashboard.putBoolean("Alarms/RvsOverSpeed", revrSpeedWarn);
-        // SmartDashboard.putBoolean("Alarms/masteralarm", masteralarm);
-        // SmartDashboard.putNumber("status/throttlePrime", throttle3);
-        // SmartDashboard.putBoolean("Alarms/RvsThrottleWarn",RvsThrottleWarn);
-        // SmartDashboard.putNumber("status/thrust", thrust1);
-        // SmartDashboard.putNumber("raw data/Xraw", throttlePosition.x);
-        // SmartDashboard.putNumber("raw data/Yraw", throttlePosition.y);
-        // SmartDashboard.putNumber("raw data/Zraw", throttlePosition.z);
-        // SmartDashboard.putBoolean("Alarms/VNE", velocityNeverToExcede);
-        // SmartDashboard.putBoolean("Alarms/V1", velocityToTurn);
+        velocityNeverToExcede = (thrust1 >= 85.00) ? true : false;
+        velocityToTurn = (thrust1 > 20.00) ? true : false;
+        masteralarm = (throttle3 <= 20.00)
+                || ((velocityNeverToExcede == true) || ((revrSpeedWarn == true) && (RvsThrottleWarn == true)));
+        RvsThrottleWarn = ((throttleForward == false) && (throttleMode == true)) ? /* (thrust1 >= 60.00)? */ (true)
+                : (false);
+        revrSpeedWarn = ((throttle3 >= 55.00) && (throttleForward == false) ? (revrSpeedWarn = true)
+                : (revrSpeedWarn = false));
+        SmartDashboard.putBoolean("Alarms/RvsOverSpeed", revrSpeedWarn);
+        SmartDashboard.putBoolean("Alarms/masteralarm", masteralarm);
+        SmartDashboard.putNumber("status/throttlePrime", throttle3);
+        SmartDashboard.putBoolean("Alarms/RvsThrottleWarn",RvsThrottleWarn);
+        SmartDashboard.putNumber("status/thrust", thrust1);
+        SmartDashboard.putNumber("raw data/Xraw", throttlePosition.x);
+        SmartDashboard.putNumber("raw data/Yraw", throttlePosition.y);
+        SmartDashboard.putNumber("raw data/Zraw", throttlePosition.z);
+        SmartDashboard.putBoolean("Alarms/VNE", velocityNeverToExcede);
+        SmartDashboard.putBoolean("Alarms/V1", velocityToTurn);
         //SmartDashboard.putBoolean("status/RobotArmed", masterSafteyOff);
         // SmartDashboard.putBoolean("BrakesIndicator",Brakes);
         // SmartDashboard.putNumber
         // VelocityCheck = (Brakes == true)?(speedbrake):throttle2;
-        SmartDashboard.putNumber("Troubleshoot/Xraw", throttlePosition.x);
-        SmartDashboard.putNumber("Troubleshoot/Yraw", throttlePosition.y);
-        SmartDashboard.putNumber("Troubleshoot/Zraw", throttlePosition.w);
-        SmartDashboard.putNumber("Troubleshoot/XScaled", scaledX);
-        SmartDashboard.putNumber("Troubleshoot/YScaled", scaledY);
-        SmartDashboard.putNumber("Troubleshoot/ZScaled", scaledZ);
-        
-
-        SmartDashboard.putBoolean("Alarms/VNE", velocityNeverToExcede);
 
         scaledX = (scaledX * 0.5 * (stopDriveMotors==false ? (throttle2) : 0.00));
         scaledY = scaledY * throttleDirectionConstant * (stopDriveMotors ==false ? (throttle2) : 0.00);
         
+        // if (throttleMode == false) {
+        // scaledX = scaledX * (drivingOffSpeed ? 0.27 : (throttle1+1.00));//note to
+        // self: default is .5 , .75 I assumed the they were proportinal so sclaed it by
+        // a factor of 40/7
+        // scaledY = scaledY * (drivingOffSpeed ? 0.40 : (throttle1+1.00));
+        // }
 
         final double right = ((-scaledX - scaledY) * -1);// +throttlePosition.z; //why plus throttle z?
         final double left = (scaledY - scaledX) * -1;
 
-        leftMotor1.set(left);
+        leftMotor1.set(ControlMode.PercentOutput, left);
         leftMotor2.follow(leftMotor1);
-        rightMotor1.set(right);
+        rightMotor1.set(ControlMode.PercentOutput, right);
         rightMotor2.follow(rightMotor1);
-
-        SmartDashboard.putNumber("Troubleshoot/leftMotors", left);
-        SmartDashboard.putNumber("Troubleshoot/rightMotors", right);
     }
 
     // it is now safe to touch stuff
 
     public void autoUpdateSpeed(double left, double right) {
-        leftMotor1.set(left);
-        rightMotor1.set(right);
+        leftMotor1.set(ControlMode.PercentOutput, left);
+        rightMotor1.set(ControlMode.PercentOutput, right);
         leftMotor2.follow(leftMotor1);
         rightMotor2.follow(rightMotor1);
-
     }
-       
 
-    public CANSparkMax getLeftMotor() {
+    public VictorSPX getLeftMotor() {
         return leftMotor1;
     }
 
-    public CANSparkMax getRightMotor() {
+    public VictorSPX getRightMotor() {
         return rightMotor1;
+    }
+
+    // public ADIS16448_IMU getGyro() {
+    // return gyro;
+    // }
+
+    public void getEncoderPosition() {
+        int encoderPositionLeft = leftMotor1.getSelectedSensorPosition();
+        System.out.println(encoderPositionLeft);
+        int encoderPositionRight = rightMotor1.getSelectedSensorPosition();
+        System.out.println(encoderPositionRight);
     }
 
     public void togglethrottleMode() {
@@ -168,7 +219,7 @@ public class DriveTrain {
     }
 
     public void cruiseControl() {
-        autoUpdateSpeed(0.9, -0.9);
+        autoUpdateSpeed(0.4, -0.4);
     }
 
     public void setThrottleDirectionConstant() {
@@ -176,83 +227,4 @@ public class DriveTrain {
         throttleForward = !throttleForward;
         SmartDashboard.putBoolean("status/foward", throttleForward);
     }
-
-    public void rightFlareEngager() {
-        throttleDirectionConstant *= -1;
-        throttleForward = !throttleForward;
-        //rightMotor1 *= -1;
-        rightflare = !rightflare;
-        SmartDashboard.putBoolean("status/foward", throttleForward);
-    }
-
-    public void stopDriveMotors() {
-      stopDriveMotors=true;
-
-    }
-    public void restartDriveMotors(){
-      stopDriveMotors=false;
-    }
-
-    public void setDrivingOffSpeed() {
-        drivingOffSpeed = !drivingOffSpeed;
-    }
-
-    public void updateRightSpeed() {
-        rightMotor1.set( 0.5);
-        rightMotor2.follow(rightMotor1);
-    }
-
-    public void stopRightSpeed() {
-        rightMotor1.set(0.0);
-        rightMotor2.follow(rightMotor1);
-    }
-
-    public void updateLeftSpeed() {
-        leftMotor1.set( 0.5);
-        leftMotor2.follow(leftMotor1);
-    }
-
-    public void stopLeftSpeed() {
-        leftMotor1.set(0.0);
-        leftMotor2.follow(leftMotor1);
-    }
-
-    int leftControlCount = 0;
-    public void leftControl() {
-        if (leftControlCount % 3 == 0) {
-            updateLeftSpeed();
-        } else if (leftControlCount % 3 == 1) {
-            stopLeftSpeed();
-        } else {}
-        leftControlCount++;
-    }
-
-    int rightControlCount = 0;
-    public void rightControl() {
-        if (rightControlCount % 3 == 0) {
-            updateRightSpeed();
-        } else if (rightControlCount % 3 == 1) {
-            stopRightSpeed();
-        } else {
-        }
-    }
-   
-
-    public void startRush() {
-        reset();
-        rushing = true;
-    }
-
-    private void reset() {
-    }
-
-    public void endRush() {
-        rushing = false;
-    }
-
-    {
-        leftControlCount++;
-    }
-
-
 }

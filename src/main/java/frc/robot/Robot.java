@@ -12,52 +12,23 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
-
-// import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Ports.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
- */
 public class Robot extends TimedRobot {
   public DriveTrain driveTrain;
+  public BallSpitter ballSpitter;
   private LambdaJoystick joystick1;
   private LambdaJoystick joystick2;
-  public Shooter shooter;
-  public Indexer indexer;
-  public PickerUpper pickerUpper;
-  public Climber climber;
+  
 
-  /**
-   * This function is run when the robot is first started up and should be used
-   * for any initialization code.
-   */
   @Override
   public void robotInit() {
-    driveTrain = new DriveTrain(0, 0, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
-    climber = new Climber(RAISE_HOOK, WINCH_UP);
-    pickerUpper = new PickerUpper(PICKERUPPER, DRAWBRIDGE);
-    shooter = new Shooter(SHOOTER_PORT);
-    joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
-    joystick2 = new LambdaJoystick(1);
-    //indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, LINE_BREAKER_PORT);
-    indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2);
-    joystick1.addButton(2, pickerUpper::pickUp, pickerUpper::stopPickingUp);
-    joystick1.addButton(1, () -> shooter.shoot(shooterVelocity));
-    joystick1.addButton(3, climber::armUp, climber::stopClimbing);
-    joystick1.addButton(4, climber::robotUp, climber::stopClimbing);
-    joystick1.addButton(5, pickerUpper::lowerDrawBridge, pickerUpper::stopLowering);
-    joystick1.addButton(6, pickerUpper::raiseDrawBridge, pickerUpper::stopRaising);
-    joystick1.addButton(7, indexer::expell, indexer::stopExpelling);
-    joystick2.addButton(1, driveTrain::setThrottleDirectionConstant);
+    driveTrain = new DriveTrain(4,3,2, 1, 0);
+    ballSpitter = new BallSpitter(SPITTERPORT);
+
 
 
   }
@@ -73,6 +44,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    
+   
+    joystick1.addButton(1, driveTrain::setThrottleDirectionConstant);
+    joystick1.addButton(3, ballSpitter::spit, ballSpitter::neutral);
+    joystick1.addButton(2, ballSpitter::suck, ballSpitter::neutral);
   }
 
   /**
