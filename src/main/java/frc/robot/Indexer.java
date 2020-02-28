@@ -16,38 +16,39 @@ public class Indexer {
     public Indexer(int port1, int port2, int port3) {
         index1 = new VictorSP(port1);
         index2 = new VictorSP(port2);
-        beamBreaker = new DigitalInput(port3);
+        //beamBreaker = new DigitalInput(port3);
     }
 
-    public void update() {
+    // public void update() {
 
-        if (loadingIndexer) {
-            if (!beamBreaker.get()) {
-                index1.set(0);
-                index2.set(0);
-                loadingIndexer = false;
-            }
-        }
+    //     if (loadingIndexer) {
+    //         if (!beamBreaker.get()) {
+    //             index1.set(0);
+    //             index2.set(0);
+    //             loadingIndexer = false;
+    //         }
+    //     }
 
-        if(feedingShooter){
-            if(beamBreaker.get()){
-                //index1.set(0);
-                //index2.set(0);
-                feedingShooter = false;
-                loadIndexer();
-            }
-        }
-    }
+    //     if(feedingShooter){
+    //         if(beamBreaker.get()){
+    //             //index1.set(0);
+    //             //index2.set(0);
+    //             feedingShooter = false;
+    //             loadIndexer();
+    //         }
+    //     }
+    // }
+    //This is the beam braker update method
 
    
     public void loadIndexer(){
-        loadingIndexer = true;
+        //loadingIndexer = true;
         index1.set(.3);
         index2.set(-.3);
     }
 
     public void feedShooter(){
-        feedingShooter = true;
+        //feedingShooter = true;
         index1.set(.3);
         index2.set(-.3);
 
