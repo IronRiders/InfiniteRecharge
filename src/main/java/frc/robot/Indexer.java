@@ -14,22 +14,22 @@ public class Indexer {
     private final CANSparkMax index2;
     DigitalInput input;
 
-    public Indexer(int port1, int port2, int port3){
+    public Indexer(int port1, int port2) { //int port3){
         index1 = new CANSparkMax(port1, MotorType.kBrushless);
         index2 = new CANSparkMax(port2, MotorType.kBrushless);
-        input = new DigitalInput(port3);
+        //input = new DigitalInput(port3);
     }
-    public Boolean detectBall() {
-       // we don't know if true is no ball or true is ball
-        boolean noBall = false; 
-       if (input.get()){
-            noBall = true;
+    // public Boolean detectBall() {
+    //    // we don't know if true is no ball or true is ball
+    //     boolean noBall = false; 
+    //    if (input.get()){
+    //         noBall = true;
                   
-        }
-        SmartDashboard.putBoolean ("indexer loaded", noBall);
-        return noBall;
+    //     }
+    //     SmartDashboard.putBoolean ("indexer loaded", noBall);
+    //     return noBall;
         
-    }
+    // }
     public void feed(){
         index1.set(.3);
         index2.set(-.3);

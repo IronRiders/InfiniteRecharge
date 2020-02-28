@@ -21,12 +21,12 @@ public class Shooter {
         shooterMotor = new CANSparkMax(portNum, MotorType.kBrushed);
         shootEncoder = shooterMotor.getEncoder();
         countsPerRevolution = shootEncoder.getCountsPerRevolution();
-        kP = .1;
-        kI = .1;
+        kP = -.1;
+        kI = -.1;
         kD = 0;
         kFF = 0;
-        kMaxOutput = 1;
-        kMinOutput = -1;
+        kMaxOutput = -1;
+        kMinOutput = 1;
         //maxRPM = 8000; 
         shooterMotor_PIDcontroller = shooterMotor.getPIDController();
         shooterMotor_PIDcontroller.setP(kP);
@@ -54,7 +54,7 @@ public class Shooter {
         if((d != kD))  { shooterMotor_PIDcontroller.setP(d); kD= d;}
         
         
-        velocity = (velocity *countsPerRevolution)/ (2 *Math.PI *wheelRadius);
+        velocity = (1*countsPerRevolution)/ (2 *Math.PI *wheelRadius);
         shooterMotor_PIDcontroller.setReference(velocity, ControlType.kVelocity);
         /*
         We could use an if else statement that if the ball count is 0, then call stop.
