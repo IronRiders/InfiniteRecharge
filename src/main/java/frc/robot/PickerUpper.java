@@ -23,7 +23,7 @@ public class PickerUpper {
 
     
     public void pickUp() {
-        pickerUpperMotor.set(ControlMode.PercentOutput, .5);
+        pickerUpperMotor.set(ControlMode.PercentOutput, -.5);
         
     }
     public void stopPickingUp(){
