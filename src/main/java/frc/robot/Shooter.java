@@ -53,10 +53,9 @@ public class Shooter {
         if((p != kP))  { shooterMotor_PIDcontroller.setP(p); kP= p;}
         if((i != kI))  { shooterMotor_PIDcontroller.setP(i); kI= i;}    
         if((d != kD))  { shooterMotor_PIDcontroller.setP(d); kD= d;}
-        
-        
-        //velocity = (velocity *countsPerRevolution)/ (2 *Math.PI *wheelRadius);
-        shooterMotor_PIDcontroller.setReference(rpm, ControlType.kVelocity);
+        rpm = rpm/6000;
+        shooterMotor.set(rpm);
+        //shooterMotor_PIDcontroller.setReference(rpm, ControlType.kVelocity);
         /*
         We could use an if else statement that if the ball count is 0, then call stop.
         */
