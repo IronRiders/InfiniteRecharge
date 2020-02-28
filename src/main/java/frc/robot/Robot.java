@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
   public Indexer indexer;
   public PickerUpper pickerUpper;
   public Climber climber;
+  public DrawBridge drawBridge;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -33,19 +34,20 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    drawBridge = new DrawBridge(DRAWBRIDGE, TOP_LIMIT_SWITCH, BOTTOM_LIMIT_SWITCH);
     driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
-    // climber = new Climber(PULL_UP, PULL_DOWN);
-    // pickerUpper = new PickerUpper(PICKERUPPER, DRAWBRIDGE);
-    // shooter = new Shooter(SHOOTER_PORT);
+    climber = new Climber(PULL_UP, PULL_DOWN);
+    pickerUpper = new PickerUpper(PICKERUPPER);
+    shooter = new Shooter(SHOOTER_PORT);
     joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
-    // indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, LINE_BREAKER_PORT);
-    // joystick1.addButton(2, pickerUpper::pickUp, pickerUpper::stopPickingUp);
-    // joystick1.addButton(1, () -> shooter.shoot(shooterVelocity));
-    // joystick1.addButton(3, climber::armUp, climber::stopClimbing);
-    // joystick1.addButton(4, climber::robotUp, climber::stopClimbing);
-    // joystick1.addButton(5, pickerUpper::lowerDrawBridge, pickerUpper::stopLowering);
-    // joystick1.addButton(6, pickerUpper::raiseDrawBridge, pickerUpper::stopRaising);
-    //joystick1.addButton(7, indexer::feed, indexer::stopExpelling);
+    indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, BEAMBREAKER);
+    joystick1.addButton(2, pickerUpper::pickUp, pickerUpper::stopPickingUp);
+    joystick1.addButton(1, () -> shooter.shoot(shooterVelocity));
+    joystick1.addButton(3, climber::armUp, climber::stopClimbing);
+    joystick1.addButton(4, climber::robotUp, climber::stopClimbing);
+    joystick1.addButton(6, indexer::loadIndexer);
+    joystick1.addButton(7, indexer::feedShooter);
+    joystick1.addButton(10, indexer::expell, indexer::stopExpelling);
   }
 
   /**
@@ -83,12 +85,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
   }
-
+  
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
+    drawBridge.updateDrawBridge();
+    indexer.update();
     joystick1.listen();
   }
 
