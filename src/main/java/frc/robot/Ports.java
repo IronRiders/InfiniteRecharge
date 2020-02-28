@@ -16,12 +16,6 @@ public class Ports{
     public static final int PULL_DOWN = 0;
     public static final int DRAWBRIDGE = 0;
     public static final int PICKERUPPER = 0;
-
-    public static double velocity;
-
-
-    public static int shooterVelocity = 4;
-
 }
 
 

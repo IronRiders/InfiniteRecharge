@@ -36,11 +36,10 @@ public class Shooter {
         shooterMotor_PIDcontroller.setFF(kFF);
         shooterMotor_PIDcontroller.setOutputRange(kMinOutput, kMaxOutput);
         
-      //puts PID numbers into smart dashboard so we can change them
+        //puts PID numbers into smart dashboard so we can change them
         SmartDashboard.putNumber ("P Gain", 0);
         SmartDashboard.putNumber ("I  Gain", 0);
         SmartDashboard.putNumber ("D  Gain", 0);
-        
     }
 
 
