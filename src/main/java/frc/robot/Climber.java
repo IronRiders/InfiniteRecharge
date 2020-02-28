@@ -18,22 +18,22 @@ public class Climber {
 
     public void armUp(){
         // climber up
-        armUpMotor.setIdleMode(IdleMode.kCoast);
         armUpMotor.set(.1);
         
     }
-
+    public void armDown(){
+        armUpMotor.set(-.1);
+    }
     public void robotUp(){
         // robot up
         robotUpMotor.set(-.1);
-        robotUpMotor.setIdleMode(IdleMode.kCoast);
     }
 
-    public void stopClimbing(){
+    public void stopEverything(){
         armUpMotor.set(0);
         robotUpMotor.set(0); 
-        armUpMotor.setIdleMode(IdleMode.kBrake);
-        robotUpMotor.setIdleMode(IdleMode.kBrake);
+        // armUpMotor.setIdleMode(IdleMode.kBrake);
+        // robotUpMotor.setIdleMode(IdleMode.kBrake);
     }
     
 }
