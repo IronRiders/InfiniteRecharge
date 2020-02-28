@@ -49,14 +49,15 @@ public class DriveTrain {
         if (throttlePosition.y < 0)
             scaledY = -scaledY;
 
-        leftMotor1.set(scaledY + scaledX);
-        rightMotor1.set(scaledY - scaledX);
+        
+        leftMotor1.set(-(scaledY - scaledX));
+       rightMotor1.set(scaledY + scaledX);
     }
 
     public void autoUpdateSpeed(double left, double right) {
         
         leftMotor1.set(left);
-        rightMotor1.set(right);
+       rightMotor1.set(right);
     }
 
 	public CANSparkMax getLeftMotor() {
