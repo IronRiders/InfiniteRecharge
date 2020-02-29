@@ -53,22 +53,23 @@ public class DriveTrain {
         leftMotor1.set(-(scaledY - scaledX));
        rightMotor1.set(scaledY + scaledX);
     }
-}
+
 //     public void autoUpdateSpeed(double left, double right) {
         
 //         leftMotor1.set(left);
 //        rightMotor1.set(right);
 //     }
 
-// 	public CANSparkMax getLeftMotor() {
-// 		return leftMotor1;
-// 	}
+	public CANSparkMax getLeftMotor() {
+		return leftMotor1;
+	}
 
-// 	public CANSparkMax getRightMotor() {
-// 		return rightMotor1;
-// 	}
+	public CANSparkMax getRightMotor() {
+		return rightMotor1;
+	}
 
 // 	//public AHRS getGyro() {
 // 		return gyro;
 // 	}
 // }
+}

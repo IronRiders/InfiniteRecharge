@@ -46,6 +46,4 @@ public class DrawBridge {
         directionMoving = 1;
     }
 
-
-
 }

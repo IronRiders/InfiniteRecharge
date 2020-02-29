@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.LambdaJoystick.ThrottlePosition;
 
@@ -30,7 +31,6 @@ public class Robot extends TimedRobot {
   public Climber climber;
   public DrawBridge drawBridge;
   
-
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -45,18 +45,19 @@ public class Robot extends TimedRobot {
     joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
     joystick2= new LambdaJoystick(1);
     indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, BEAMBREAKER);
+    // imageRec = new ImageRec();
 
-    
-    joystick1.addButton(3, pickerUpper::pickUp, pickerUpper::stopPickingUp);
-    joystick1.addButton(4, shooter::shootWithOutPid, shooter::stop);
-    // joystick1.addButton(1, () -> shooter.shoot(ThrottlePosition.w));
-    //joystick1.addButton(3, climber::armUp, climber::stopEverything);
+    joystick2.addButton(5, pickerUpper::reversePickUp, pickerUpper::stopPickingUp);
+    joystick2.addButton(3, pickerUpper::pickUp, pickerUpper::stopPickingUp);
+    joystick2.addButton(4, shooter::shootWithOutPid, shooter::stop);
+    joystick2.addButton(2, indexer::feedShooter, indexer::stopEverything);
+
+    //joystick1.addButton(1, () -> shooter.shoot(ThrottlePosition.w));
+    // joystick1.addButton(3, climber::armUp, climber::stopEverything);
     // joystick1.addButton(4, climber::robotUp, climber::stopEverything);
     // joystick1.addButton(5, climber::armDown, climber::stopEverything);
-    //joystick1.addButton(6, indexer::loadIndexer);
-    //joystick1.addButton(7, indexer::feedShooter);
-
-    joystick1.addButton(2, indexer::feedShooter, indexer::stopEverything);
+    // joystick1.addButton(6, indexer::loadIndexer);
+    // joystick1.addButton(7, indexer::feedShooter);
   }
 
   /**
@@ -93,16 +94,29 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    double timer = DriverStation.getInstance().getMatchTime();
+    if (timer == 7) {
+      shooter.shootWithOutPid();
+    } else if  (timer >= 8) {
+      driveTrain.getLeftMotor().set(-.1);
+      driveTrain.getRightMotor().set(.1);
+    }
   }
   
   /**
    * This function is called periodically during operator control.
    */
   @Override
+  public void teleopInit() {
+   
+  }
+
+  @Override
   public void teleopPeriodic() {
     //drawBridge.updateDrawBridge();
     //indexer.update();
-    shooter.setSpeed(joystick1.getRawAxis(3));
+    shooter.setSpeed(joystick2.getRawAxis(3));
+    joystick2.listen();
     joystick1.listen();
   }
 
