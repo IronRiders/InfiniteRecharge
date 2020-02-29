@@ -14,7 +14,7 @@ public class Ports{
 
     public static final int PULL_UP = 0;
     public static final int PULL_DOWN = 0;
-    public static final int DRAWBRIDGE = 8;
+    public static final int DRAWBRIDGE = 6;
     public static final int PICKERUPPER = 10;
     public static final int BEAMBREAKER = 0;
     public static final int TOP_LIMIT_SWITCH =0;

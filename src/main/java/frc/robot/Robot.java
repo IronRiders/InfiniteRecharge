@@ -30,14 +30,14 @@ public class Robot extends TimedRobot {
   public PickerUpper pickerUpper;
   public Climber climber;
   public DrawBridge drawBridge;
-  
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
   @Override
   public void robotInit() {
-    // drawBridge = new DrawBridge(DRAWBRIDGE, TOP_LIMIT_SWITCH, BOTTOM_LIMIT_SWITCH);
+    drawBridge = new DrawBridge(DRAWBRIDGE);
     driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
     //climber = new Climber(PULL_UP, PULL_DOWN);
     pickerUpper = new PickerUpper(PICKERUPPER);
@@ -46,7 +46,8 @@ public class Robot extends TimedRobot {
     joystick2= new LambdaJoystick(1);
     indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, BEAMBREAKER);
     // imageRec = new ImageRec();
-
+    joystick2.addButton(6, drawBridge::raisePickerUpper, drawBridge::stop);
+    joystick2.addButton(7, drawBridge::lowerPickerUpper, drawBridge::stop);
     joystick2.addButton(5, pickerUpper::reversePickUp, pickerUpper::stopPickingUp);
     joystick2.addButton(3, pickerUpper::pickUp, pickerUpper::stopPickingUp);
     joystick2.addButton(4, shooter::shootWithOutPid, shooter::stop);
