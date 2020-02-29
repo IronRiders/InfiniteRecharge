@@ -6,19 +6,20 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.LambdaJoystick;
+import frc.robot.LambdaJoystick.ThrottlePosition;
 public class Shooter {
     //private CANEncoder shootEncoder;
     private CANPIDController shooterMotor_PIDcontroller;
     private double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;// maxRPM;
     //private int countsPerRevolution;
     private CANSparkMax shooterMotor;
-
+    private double speed;
     //private double wheelRadius = 0.1016;
     //this RPM is a estamate from build.
 
     public Shooter(int portNum) {
-        shooterMotor = new CANSparkMax(portNum, MotorType.kBrushed);
+        shooterMotor = new CANSparkMax(portNum, MotorType.kBrushless);
         //shootEncoder = shooterMotor.getEncoder();
         //countsPerRevolution = shootEncoder.getCountsPerRevolution();
         kP = .1;
@@ -53,15 +54,25 @@ public class Shooter {
         if((p != kP))  { shooterMotor_PIDcontroller.setP(p); kP= p;}
         if((i != kI))  { shooterMotor_PIDcontroller.setP(i); kI= i;}    
         if((d != kD))  { shooterMotor_PIDcontroller.setP(d); kD= d;}
-        rpm = rpm/6000;
-        shooterMotor.set(rpm);
-        //shooterMotor_PIDcontroller.setReference(rpm, ControlType.kVelocity);
+        
+        shooterMotor_PIDcontroller.setReference(rpm, ControlType.kVelocity);
         /*
         We could use an if else statement that if the ball count is 0, then call stop.
         */
 
     }
 
+    public void shootWithOutPid(){
+        double w = this.speed;
+        w = (.5* w +.5)*-1;
+        shooterMotor.set(w);
+
+    }
+
+    public void setSpeed(double speed){
+       this.speed = speed;
+        System.out.println(speed);
+    }
     public void stop(){
         shooterMotor.set(0);
     }
