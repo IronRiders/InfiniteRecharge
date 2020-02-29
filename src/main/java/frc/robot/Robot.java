@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
     joystick2= new LambdaJoystick(1);
     indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, BEAMBREAKER);
 
-    
+    joystick1.addButton(5, pickerUpper::reversePickUp, pickerUpper::stopPickingUp);
     joystick1.addButton(3, pickerUpper::pickUp, pickerUpper::stopPickingUp);
     joystick1.addButton(4, shooter::shootWithOutPid, shooter::stop);
     // joystick1.addButton(1, () -> shooter.shoot(ThrottlePosition.w));
