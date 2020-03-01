@@ -17,12 +17,12 @@ import edu.wpi.first.wpilibj.DigitalInput;
         }
 
         public void lowerPickerUpper(){
-            drawBridgeMotor.set(ControlMode.PercentOutput, .1);
+            drawBridgeMotor.set(ControlMode.PercentOutput, .7);
             
         }
 
         public void raisePickerUpper(){
-            drawBridgeMotor.set(ControlMode.PercentOutput, -.1);
+            drawBridgeMotor.set(ControlMode.PercentOutput, -.7);
 
         }
         public void stop(){

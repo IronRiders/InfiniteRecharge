@@ -4,6 +4,8 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.LambdaJoystick.ThrottlePosition;
 
 public class DriveTrain {
@@ -13,6 +15,7 @@ public class DriveTrain {
     private final CANSparkMax rightMotor1;
     private final CANSparkMax leftMotor2;
     private final CANSparkMax rightMotor2;
+    private final boolean throttleMode = true;
 
     public int throttleDirectionConstant = 1;
 
@@ -34,7 +37,7 @@ public class DriveTrain {
     public void updateSpeed(final ThrottlePosition throttlePosition) {
         double scaledX = throttlePosition.x;
         double scaledY = throttlePosition.y;
-        // double scaledZ = throttlePosition.z;
+        double scaledW = throttlePosition.w;
         double scaleFactorA = 0.3;
         double scaleFactorB = 0.7;
         // Top is X scale bottem is Y
@@ -49,9 +52,15 @@ public class DriveTrain {
         if (throttlePosition.y < 0)
             scaledY = -scaledY;
 
-        
+        double throttle1 = scaledW * -1;
+        double throttle2 = throttleMode ? ((throttle1 + 1.00) / 2.00) : 0.70;
+
         leftMotor1.set(-(scaledY - scaledX));
-       rightMotor1.set(scaledY + scaledX);
+        rightMotor1.set(scaledY + scaledX);
+    }
+
+    public void setThrottleDirectionConstant(){
+        throttleDirectionConstant=-1*throttleDirectionConstant;
     }
 
 //     public void autoUpdateSpeed(double left, double right) {

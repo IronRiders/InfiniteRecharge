@@ -51,14 +51,14 @@ public class Indexer {
 
     public void feedShooter(){
         feedingShooter = true;
-        index1.set(ControlMode.PercentOutput, -.2);
-        index2.set(ControlMode.PercentOutput, .2);
+        index1.set(ControlMode.PercentOutput, -.3);
+        index2.set(ControlMode.PercentOutput, .3);
 //These are the correct values for the indexer
     }
 
     public void expell(){
-        index1.set(ControlMode.PercentOutput, -.7);
-        index2.set(ControlMode.PercentOutput, .7);
+        index1.set(ControlMode.PercentOutput, .6);
+        index2.set(ControlMode.PercentOutput, -.6);
     }
     public void stopEverything(){
         index2.set(ControlMode.PercentOutput, 0);

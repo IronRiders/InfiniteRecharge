@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.LambdaJoystick;
 import frc.robot.LambdaJoystick.ThrottlePosition;
 public class Shooter {
@@ -19,6 +20,7 @@ public class Shooter {
     //this RPM is a estamate from build.
 
     public Shooter(int portNum) {
+
         shooterMotor = new CANSparkMax(portNum, MotorType.kBrushless);
         //shootEncoder = shooterMotor.getEncoder();
         //countsPerRevolution = shootEncoder.getCountsPerRevolution();
@@ -68,10 +70,19 @@ public class Shooter {
         shooterMotor.set(w);
 
     }
+    public void shootReverse(){
+        double w = this.speed;
+        w = (.5* w + .5);
+        shooterMotor.set(w);
+    }
+
+
+    public void autoShoot() {
+        shooterMotor.set(-1);
+    }
 
     public void setSpeed(double speed){
        this.speed = speed;
-        System.out.println(speed);
     }
     public void stop(){
         shooterMotor.set(0);

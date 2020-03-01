@@ -9,6 +9,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.LambdaJoystick.ThrottlePosition;
+import edu.wpi.first.cameraserver.*;
 
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,26 +40,21 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     drawBridge = new DrawBridge(DRAWBRIDGE);
     driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
-    //climber = new Climber(PULL_UP, PULL_DOWN);
     pickerUpper = new PickerUpper(PICKERUPPER);
     shooter = new Shooter(SHOOTER_PORT);
     joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
+    joystick1.addButton(1,driveTrain::setThrottleDirectionConstant);
     joystick2= new LambdaJoystick(1);
     indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, BEAMBREAKER);
-    // imageRec = new ImageRec();
-    joystick2.addButton(6, drawBridge::raisePickerUpper, drawBridge::stop);
-    joystick2.addButton(7, drawBridge::lowerPickerUpper, drawBridge::stop);
+
+    joystick2.addButton(1, shooter::shootReverse, shooter::stop);
+    joystick2.addButton(10, drawBridge::raisePickerUpper, drawBridge::stop);
+    joystick2.addButton(11, drawBridge::lowerPickerUpper, drawBridge::stop);
     joystick2.addButton(5, pickerUpper::reversePickUp, pickerUpper::stopPickingUp);
     joystick2.addButton(3, pickerUpper::pickUp, pickerUpper::stopPickingUp);
     joystick2.addButton(4, shooter::shootWithOutPid, shooter::stop);
     joystick2.addButton(2, indexer::feedShooter, indexer::stopEverything);
-
-    //joystick1.addButton(1, () -> shooter.shoot(ThrottlePosition.w));
-    // joystick1.addButton(3, climber::armUp, climber::stopEverything);
-    // joystick1.addButton(4, climber::robotUp, climber::stopEverything);
-    // joystick1.addButton(5, climber::armDown, climber::stopEverything);
-    // joystick1.addButton(6, indexer::loadIndexer);
-    // joystick1.addButton(7, indexer::feedShooter);
+    joystick2.addButton(8, indexer::expell, indexer::stopEverything);
   }
 
   /**
@@ -96,12 +92,13 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     double timer = DriverStation.getInstance().getMatchTime();
-    if (timer == 7) {
-      shooter.shootWithOutPid();
-    } else if  (timer >= 8) {
-      driveTrain.getLeftMotor().set(-.1);
-      driveTrain.getRightMotor().set(.1);
-    }
+    shooter.autoShoot();
+    if (timer < 13.0) {
+      indexer.feedShooter();
+    } else if (timer < 5) {
+      driveTrain.getLeftMotor().set(.1);
+      driveTrain.getRightMotor().set(-.1);
+    } 
   }
   
   /**
@@ -109,6 +106,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
+    indexer.stopEverything();
+    shooter.stop();
+    driveTrain.getLeftMotor().set(0);
+    driveTrain.getRightMotor().set(0);
    
   }
 
