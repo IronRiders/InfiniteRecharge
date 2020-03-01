@@ -17,6 +17,14 @@ public class ImageRec {
     public void log() {
         boolean targets = hasTargets.getDouble(0) == 1;
         SmartDashboard.putBoolean("ImageRec/hasTargets", targets);
-        SmartDashboard.putNumber("ImageRec/turnLeft", xAngleOffset.getDouble(0));
+        SmartDashboard.putNumber("ImageRec/turnRightDegrees", xAngleOffset.getDouble(0));
+    }
+
+    public boolean getHasTarget() {
+        return hasTargets.getDouble(0) == 1;
+    }
+
+    public double getHorizontalAngleOffset() {
+        return xAngleOffset.getDouble(0);
     }
 }
