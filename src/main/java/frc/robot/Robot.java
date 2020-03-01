@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
     public PickerUpper pickerUpper;
     public Climber climber;
     public DrawBridge drawBridge;
-    public ImageRec imageRec;
+    //public ImageRec imageRec;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
         joystick1.addButton(1, driveTrain::setThrottleDirectionConstant);
         joystick2 = new LambdaJoystick(1);
         indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, BEAMBREAKER);
-        imageRec = new ImageRec();
+        //imageRec = new ImageRec();
 
         joystick2.addButton(2, shooter::shootReverse, shooter::stop);
         // joystick1.addButton(3, drawBridge::raisePickerUpper, drawBridge::stop);
@@ -133,7 +133,7 @@ public class Robot extends TimedRobot {
         joystick2.listen();
         joystick1.listen();
         // shooter.updateIndexer();
-        imageRec.log();
+        //imageRec.log();
     }
 
     /**
