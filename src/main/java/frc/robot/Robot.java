@@ -99,7 +99,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     double timer = DriverStation.getInstance().getMatchTime();
-    shooter.autoShoot();
     if (timer < 13.0) {
       indexer.feedShooter();
     } 
@@ -107,7 +106,12 @@ public class Robot extends TimedRobot {
       shooter.stop();
       driveTrain.getLeftMotor().set(-.1);
       driveTrain.getRightMotor().set(.1);
-    } 
+    } else {
+      shooter.autoShoot();
+    }
+    if (timer < 7.00) {
+      indexer.stopEverything();
+    }
   }
   
   /**
