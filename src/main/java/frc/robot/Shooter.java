@@ -10,8 +10,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import frc.robot.LambdaJoystick;
-import frc.robot.LambdaJoystick.ThrottlePosition;
 public class Shooter {
     //private CANEncoder shootEncoder;
     private CANPIDController shooterMotor_PIDcontroller;

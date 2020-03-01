@@ -5,9 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 //import com.fasterxml.jackson.core.util.DefaultIndenter;
 import edu.wpi.first.wpilibj.DigitalInput;
 //import edu.wpi.first.wpilibj.DigitalSource;
-import edu.wpi.first.wpilibj.VictorSP;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Indexer {
     private final VictorSPX index1;
