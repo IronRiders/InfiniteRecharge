@@ -43,7 +43,9 @@ public class DriveTrain {
         // Top is X scale bottem is Y
         double scaleFactorC = 0.3;
         double scaleFactorD = 0.7;
-        scaledY = (scaleFactorC * Math.abs(throttlePosition.y))
+        double throttle1 = scaledW * -1;
+        double throttle2 = throttleMode ? ((throttle1 + 1.00) / 2.00) : 0.70;
+        scaledY = (scaleFactorC * Math.abs(throttlePosition.y*throttleDirectionConstant*throttle2))
                 + (scaleFactorD * throttlePosition.y * throttlePosition.y);
         scaledX = (scaleFactorA * Math.abs(throttlePosition.x))
                 + (scaleFactorB * throttlePosition.x * throttlePosition.x);
@@ -52,8 +54,7 @@ public class DriveTrain {
         if (throttlePosition.y < 0)
             scaledY = -scaledY;
 
-        double throttle1 = scaledW * -1;
-        double throttle2 = throttleMode ? ((throttle1 + 1.00) / 2.00) : 0.70;
+       
 
         leftMotor1.set(-(scaledY - scaledX));
         rightMotor1.set(scaledY + scaledX);

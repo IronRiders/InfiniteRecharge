@@ -4,7 +4,10 @@ package frc.robot;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.LambdaJoystick;
@@ -16,11 +19,12 @@ public class Shooter {
     //private int countsPerRevolution;
     private CANSparkMax shooterMotor;
     private double speed;
+    private double startShootTime;
     //private double wheelRadius = 0.1016;
     //this RPM is a estamate from build.
 
     public Shooter(int portNum) {
-
+        
         shooterMotor = new CANSparkMax(portNum, MotorType.kBrushless);
         //shootEncoder = shooterMotor.getEncoder();
         //countsPerRevolution = shootEncoder.getCountsPerRevolution();
@@ -44,6 +48,7 @@ public class Shooter {
         SmartDashboard.putNumber ("I  Gain", 0);
         SmartDashboard.putNumber ("D  Gain", 0);
         
+        shooterMotor.setIdleMode(IdleMode.kCoast);  
     }
 
 
@@ -68,17 +73,19 @@ public class Shooter {
         double w = this.speed;
         w = (.5* w +.5)*-1;
         shooterMotor.set(w);
-
+        System.out.println("Shoot w/o PID");
     }
     public void shootReverse(){
         double w = this.speed;
         w = (.5* w + .5);
         shooterMotor.set(w);
+        System.out.println("Shoot reverse");
     }
 
 
     public void autoShoot() {
         shooterMotor.set(-1);
+        System.out.println("Auto shoot");
     }
 
     public void setSpeed(double speed){
@@ -86,5 +93,20 @@ public class Shooter {
     }
     public void stop(){
         shooterMotor.set(0);
+        System.out.println("Stop");
+    }
+    public void startShoot() {
+       startShootTime = DriverStation.getInstance().getMatchTime();
+       shooterMotor.set(1);
+       System.out.println("Start shoot");
+    }
+    public void updateIndexer(){
+        
+        if(DriverStation.getInstance().getMatchTime() < (startShootTime-4)){
+
+        }
+    }
+    public CANSparkMax getMotor() {
+        return shooterMotor;
     }
 }

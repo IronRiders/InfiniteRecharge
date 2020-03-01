@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.LambdaJoystick.ThrottlePosition;
@@ -14,6 +15,8 @@ import edu.wpi.first.cameraserver.*;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Ports.*;
+
+import com.revrobotics.CANSparkMax.IdleMode;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -38,6 +41,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    CameraServer.getInstance().startAutomaticCapture();
+    //CameraServer.getInstance().startAutomaticCapture(1);
     drawBridge = new DrawBridge(DRAWBRIDGE);
     driveTrain = new DriveTrain(LEFT_DRIVETRAIN_1, LEFT_DRIVETRAIN_2, RIGHT_DRIVETAIN_1, RIGHT_DRIVETAIN_2, GYRO_PORT);
     pickerUpper = new PickerUpper(PICKERUPPER);
@@ -47,14 +52,16 @@ public class Robot extends TimedRobot {
     joystick2= new LambdaJoystick(1);
     indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, BEAMBREAKER);
 
-    joystick2.addButton(1, shooter::shootReverse, shooter::stop);
-    joystick2.addButton(10, drawBridge::raisePickerUpper, drawBridge::stop);
-    joystick2.addButton(11, drawBridge::lowerPickerUpper, drawBridge::stop);
-    joystick2.addButton(5, pickerUpper::reversePickUp, pickerUpper::stopPickingUp);
-    joystick2.addButton(3, pickerUpper::pickUp, pickerUpper::stopPickingUp);
-    joystick2.addButton(4, shooter::shootWithOutPid, shooter::stop);
-    joystick2.addButton(2, indexer::feedShooter, indexer::stopEverything);
+    
+    joystick2.addButton(2, shooter::shootReverse, shooter::stop);
+    // joystick1.addButton(3, drawBridge::raisePickerUpper, drawBridge::stop);  MECHNICAL BROKEN
+    // joystick1.addButton(4, drawBridge::lowerPickerUpper, drawBridge::stop);
+    // joystick2.addButton(7, pickerUpper::reversePickUp, pickerUpper::stopPickingUp);
+    // joystick2.addButton(3, pickerUpper::pickUp, pickerUpper::stopPickingUp); --> MECHANICAL BROKEN
+    joystick2.addButton(1, shooter::shootWithOutPid, shooter::stop);
+    joystick2.addButton(4, indexer::feedShooter, indexer::stopEverything);
     joystick2.addButton(8, indexer::expell, indexer::stopEverything);
+    //joystick2.addButton(0, shooter::startShoot,shooter::stopShoot);
   }
 
   /**
@@ -95,9 +102,11 @@ public class Robot extends TimedRobot {
     shooter.autoShoot();
     if (timer < 13.0) {
       indexer.feedShooter();
-    } else if (timer < 5) {
-      driveTrain.getLeftMotor().set(.1);
-      driveTrain.getRightMotor().set(-.1);
+    } 
+    if (timer < 10.00) {
+      shooter.stop();
+      driveTrain.getLeftMotor().set(-.1);
+      driveTrain.getRightMotor().set(.1);
     } 
   }
   
@@ -106,8 +115,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-    indexer.stopEverything();
-    shooter.stop();
     driveTrain.getLeftMotor().set(0);
     driveTrain.getRightMotor().set(0);
    
@@ -120,6 +127,7 @@ public class Robot extends TimedRobot {
     shooter.setSpeed(joystick2.getRawAxis(3));
     joystick2.listen();
     joystick1.listen();
+    //shooter.updateIndexer();
   }
 
   /**
