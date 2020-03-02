@@ -44,19 +44,20 @@ public class DriveTrain {
         double scaleFactorD = 0.7;
         double throttle1 = scaledW * -1;
         double throttle2 = throttleMode ? ((throttle1 + 1.00) / 2.00) : 0.70;
-        scaledY = (scaleFactorC * Math.abs(throttlePosition.y*throttleDirectionConstant*throttle2))
-                + (scaleFactorD * throttlePosition.y * throttlePosition.y);
+        scaledY = (scaleFactorC * Math.abs(throttlePosition.y)
+                + (scaleFactorD * throttlePosition.y * throttlePosition.y));
         scaledX = (scaleFactorA * Math.abs(throttlePosition.x))
                 + (scaleFactorB * throttlePosition.x * throttlePosition.x);
         if (throttlePosition.x < 0)
             scaledX = -scaledX;
         if (throttlePosition.y < 0)
             scaledY = -scaledY;
-
+       double actualY = scaledY *throttleDirectionConstant*throttle2;
+       double actualX = scaledX*0.5*throttle2;
        
 
-        leftMotor1.set(-(scaledY - scaledX));
-        rightMotor1.set(scaledY + scaledX);
+        leftMotor1.set(-(actualY - actualX));
+        rightMotor1.set(actualY + actualX);
     }
 
     public void setThrottleDirectionConstant(){

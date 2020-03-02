@@ -18,6 +18,7 @@ public class Shooter {
     private CANSparkMax shooterMotor;
     private double speed;
     private double startShootTime;
+    public double shooterDirectionalConstant;
     //private double wheelRadius = 0.1016;
     //this RPM is a estamate from build.
 
@@ -69,7 +70,7 @@ public class Shooter {
 
     public void shootWithOutPid(){
         double w = this.speed;
-        w = (.5* w +.5)*-1;
+        w = (.5* w +.5)*shooterDirectionalConstant;
         shooterMotor.set(w);
         System.out.println("Shoot w/o PID");
     }
@@ -77,7 +78,7 @@ public class Shooter {
         double w = this.speed;
         w = (.5* w + .5);
         shooterMotor.set(w);
-        System.out.println("Shoot reverse");
+        SmartDashboard.putNumber("status/Shoot reverse", w);
     }
 
 

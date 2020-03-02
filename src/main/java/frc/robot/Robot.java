@@ -47,22 +47,24 @@ public class Robot extends TimedRobot {
         pickerUpper = new PickerUpper(PICKERUPPER);
         shooter = new Shooter(SHOOTER_PORT);
         joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
-        joystick1.addButton(1, driveTrain::setThrottleDirectionConstant);
+        
         joystick2 = new LambdaJoystick(1);
         indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, BEAMBREAKER);
         //imageRec = new ImageRec();
 
-        joystick2.addButton(2, shooter::shootReverse, shooter::stop);
+
+        // joystick2.addButton(4, shooter::shootReverse, shooter::stop);
         // joystick1.addButton(3, drawBridge::raisePickerUpper, drawBridge::stop);
         // MECHNICAL BROKEN
         // joystick1.addButton(4, drawBridge::lowerPickerUpper, drawBridge::stop);
-        // joystick2.addButton(7, pickerUpper::reversePickUp,
+        // joystick2.addButton(7, pickerU2pper::reversePickUp,
         // pickerUpper::stopPickingUp);
         // joystick2.addButton(3, pickerUpper::pickUp, pickerUpper::stopPickingUp); -->
         // MECHANICAL BROKEN
-        joystick2.addButton(1, shooter::shootWithOutPid, shooter::stop);
-        joystick2.addButton(4, indexer::feedShooter, indexer::stopEverything);
-        joystick2.addButton(8, indexer::expell, indexer::stopEverything);
+      
+        joystick1.addButton(1, driveTrain::setThrottleDirectionConstant);
+        //joystick2.addButton(1, indexer::loadIndexer, indexer::expell);;
+   
         // joystick2.addButton(0, shooter::startShoot,shooter::stopShoot);
     }
 
@@ -102,17 +104,21 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {
         double timer = DriverStation.getInstance().getMatchTime();
         if (timer < 13.0) {
-            indexer.feedShooter();
+           // indexer.autoFeedShooter();
+            //shooter.autoShoot();
+            driveTrain.getLeftMotor().set(0);
+            driveTrain.getRightMotor().set(0);
         }
         if (timer < 10.00) {
-            shooter.stop();
+            
             driveTrain.getLeftMotor().set(-.1);
             driveTrain.getRightMotor().set(.1);
+            shooter.stop();
         } else {
             shooter.autoShoot();
         }
         if (timer < 7.00) {
-            indexer.stopEverything();
+           // indexer.stopEverything();
         }
     }
 
@@ -129,7 +135,9 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         // drawBridge.updateDrawBridge();
         // indexer.update();
+        shooter.shootWithOutPid();
         shooter.setSpeed(joystick2.getRawAxis(3));
+       // indexer.setSpeed(joystick2.getRawAxis(1));
         joystick2.listen();
         joystick1.listen();
         // shooter.updateIndexer();
