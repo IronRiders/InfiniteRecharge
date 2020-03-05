@@ -6,7 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import frc.robot.LambdaJoystick.ThrottlePosition;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -18,7 +18,7 @@ public class Shooter {
     private CANSparkMax shooterMotor;
     private double speed;
     private double startShootTime;
-    public double shooterDirectionalConstant;
+    public double shooterDirectionalConstant=1;
     //private double wheelRadius = 0.1016;
     //this RPM is a estamate from build.
 
@@ -68,11 +68,17 @@ public class Shooter {
 
     }
 
-    public void shootWithOutPid(){
-        double w = this.speed;
-        w = (.5* w +.5)*shooterDirectionalConstant;
-        shooterMotor.set(w);
-        System.out.println("Shoot w/o PID");
+    // public void setSpeed(double speed){
+    //     this.speed = speed;
+    //  }
+
+    public void shootWithOutPid(ThrottlePosition throttlePosition){
+        
+        double speed = throttlePosition.w;
+        double shooterSpeed = (.5* speed +.5)*shooterDirectionalConstant;
+        shooterMotor.set(shooterSpeed);
+        System.out.println("Shoot w/o PID "+speed);
+        System.out.println(shooterSpeed);
     }
     public void shootReverse(){
         double w = this.speed;
@@ -81,15 +87,12 @@ public class Shooter {
         SmartDashboard.putNumber("status/Shoot reverse", w);
     }
 
-
     public void autoShoot() {
-        shooterMotor.set(-1);
+        shooterMotor.set(2);//speed lowered for noise reduction during testing, increase to -1 for shooting
         System.out.println("Auto shoot");
     }
 
-    public void setSpeed(double speed){
-       this.speed = speed;
-    }
+    
     public void stop(){
         shooterMotor.set(0);
         System.out.println("Stop");

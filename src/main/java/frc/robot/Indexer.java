@@ -55,8 +55,8 @@ public class Indexer {
     }
 
     public void expell(){
-        index1.set(ControlMode.PercentOutput, .6);
-        index2.set(ControlMode.PercentOutput, -.6);
+        index1.set(ControlMode.PercentOutput, .2);
+        index2.set(ControlMode.PercentOutput, -.2);
     }
     public void stopEverything(){
         index2.set(ControlMode.PercentOutput, 0);

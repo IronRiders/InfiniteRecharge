@@ -2,22 +2,21 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ImageRec {
+    private final double limelightHeight = 1.92; // TODO feet
+    private final double limelightPitch = 0; // TODO degrees
+    private final double targetHeight = 1.5;//8.1875; // feet
+
     private NetworkTableEntry hasTargets;
     private NetworkTableEntry xAngleOffset;
+    private NetworkTableEntry yAngleOffset;
 
     public ImageRec() {
         NetworkTableInstance tables = NetworkTableInstance.getDefault();
         hasTargets = tables.getTable("limelight").getEntry("tv");
         xAngleOffset = tables.getTable("limelight").getEntry("tx");
-    }
-
-    public void log() {
-        boolean targets = hasTargets.getDouble(0) == 1;
-        SmartDashboard.putBoolean("ImageRec/hasTargets", targets);
-        SmartDashboard.putNumber("ImageRec/turnRightDegrees", xAngleOffset.getDouble(0));
+        yAngleOffset = tables.getTable("limelight").getEntry("ty");
     }
 
     public boolean getHasTarget() {
@@ -26,5 +25,13 @@ public class ImageRec {
 
     public double getHorizontalAngleOffset() {
         return xAngleOffset.getDouble(0);
+    }
+
+    public double getVerticalAngleOffset() {
+        return yAngleOffset.getDouble(0);
+    }
+
+    public double getEstimatedDistance() {
+        return (targetHeight - limelightHeight) / Math.tan(Math.toRadians(limelightPitch + getVerticalAngleOffset()));
     }
 }

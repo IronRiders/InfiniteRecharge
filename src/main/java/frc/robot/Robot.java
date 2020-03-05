@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.*;
 
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,7 +32,7 @@ public class Robot extends TimedRobot {
     public PickerUpper pickerUpper;
     public Climber climber;
     public DrawBridge drawBridge;
-    //public ImageRec imageRec;
+    public ImageRec imageRec;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -47,10 +48,10 @@ public class Robot extends TimedRobot {
         pickerUpper = new PickerUpper(PICKERUPPER);
         shooter = new Shooter(SHOOTER_PORT);
         joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
-        
-        joystick2 = new LambdaJoystick(1);
+                     
+        joystick2 = new LambdaJoystick(1,shooter::shootWithOutPid);
         indexer = new Indexer(INDEX_MOTOR_1, INDEX_MOTOR_2, BEAMBREAKER);
-        //imageRec = new ImageRec();
+        imageRec = new ImageRec();
 
 
         // joystick2.addButton(4, shooter::shootReverse, shooter::stop);
@@ -63,7 +64,7 @@ public class Robot extends TimedRobot {
         // MECHANICAL BROKEN
       
         joystick1.addButton(1, driveTrain::setThrottleDirectionConstant);
-        //joystick2.addButton(1, indexer::loadIndexer, indexer::expell);;
+        joystick2.addButton(1, indexer::feedShooter, indexer::expell);;
    
         // joystick2.addButton(0, shooter::startShoot,shooter::stopShoot);
     }
@@ -104,22 +105,23 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {
         double timer = DriverStation.getInstance().getMatchTime();
         if (timer < 13.0) {
-           // indexer.autoFeedShooter();
-            //shooter.autoShoot();
-            driveTrain.getLeftMotor().set(0);
+           indexer.feedShooter();
+            
+            driveTrain.getLeftMotor().set(0);   
+                                                                                                   
             driveTrain.getRightMotor().set(0);
         }
-        if (timer < 10.00) {
+       else if (timer < 10.00) {
             
-            driveTrain.getLeftMotor().set(-.1);
-            driveTrain.getRightMotor().set(.1);
+            driveTrain.getLeftMotor().set(-.2);
+            driveTrain.getRightMotor().set(.2);
             shooter.stop();
         } else {
             shooter.autoShoot();
         }
-        if (timer < 7.00) {
-           // indexer.stopEverything();
-        }
+        // if (timer < 7.00) {
+        //    // indexer.stopEverything();
+        // }
     }
 
     /**
@@ -129,19 +131,21 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         driveTrain.getLeftMotor().set(0);
         driveTrain.getRightMotor().set(0);
-    }
+    } 
 
     @Override
     public void teleopPeriodic() {
-        // drawBridge.updateDrawBridge();
-        // indexer.update();
-        shooter.shootWithOutPid();
-        shooter.setSpeed(joystick2.getRawAxis(3));
-       // indexer.setSpeed(joystick2.getRawAxis(1));
         joystick2.listen();
         joystick1.listen();
+        // drawBridge.updateDrawBridge();
+        // indexer.update();
+        // shooter.setSpeed(joystick2.getRawAxis(3));
+    
+        
+       // indexer.setSpeed(joystick2.getRawAxis(1));
+
         // shooter.updateIndexer();
-        //imageRec.log();
+        SmartDashboard.putNumber("ImageRec/distance", imageRec.getEstimatedDistance());
     }
 
     /**
