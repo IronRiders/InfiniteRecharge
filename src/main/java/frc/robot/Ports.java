@@ -14,7 +14,14 @@ public class Ports{
     public static final int LEFT_DRIVETRAIN_2 = 4;
     public static final int RIGHT_DRIVETAIN_1 = 2;
     public static final int RIGHT_DRIVETAIN_2 = 1;
-    public static final int SPITTERPORT = 1;
+
+    public static final int  SHOOTER_PORT =5;
+    public static final int WINCH_UP = 6;
+    public static final int RAISE_HOOK = 7;
+    public static final int DRAWBRIDGE = 8;
+    public static final int PICKERUPPER	= 9;
+    public static final int INDEX_MOTOR_1 = 10;
+    public static final int INDEX_MOTOR_2 = 11;
     
    
 

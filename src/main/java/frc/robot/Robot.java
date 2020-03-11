@@ -21,8 +21,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    driveTrain = new DriveTrain(4,3,2, 1, 0);
-    ballSpitter = new BallSpitter(5);
+   
 
 
 
@@ -31,7 +30,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     
-   
+    driveTrain = new DriveTrain(4,3,2, 1, 0);
+    ballSpitter = new BallSpitter(5);
     joystick1.addButton(1, driveTrain::setThrottleDirectionConstant);
     joystick1.addButton(3, ballSpitter::spit, ballSpitter::neutral);
     joystick1.addButton(2, ballSpitter::suck, ballSpitter::neutral);
