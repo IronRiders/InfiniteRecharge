@@ -52,8 +52,11 @@ public class Robot extends TimedRobot {
     joystick2.addButton(4, shooter::shootWithOutPid, shooter::stop);
     joystick2.addButton(2, indexer::feedShooter, indexer::stopEverything);
 
-    //joystick1.addButton(1, () -> shooter.shoot(ThrottlePosition.w));
-    // joystick1.addButton(3, climber::armUp, climber::stopEverything);
+    joystick1.addButton(5, pickerUpper::reversePickUp, pickerUpper::stopPickingUp);
+    joystick1.addButton(3, pickerUpper::pickUp, pickerUpper::stopPickingUp);
+    joystick1.addButton(4, shooter::shootWithOutPid, shooter::stop);
+    // joystick1.addButton(1, () -> shooter.shoot(ThrottlePosition.w));
+    //joystick1.addButton(3, climber::armUp, climber::stopEverything);
     // joystick1.addButton(4, climber::robotUp, climber::stopEverything);
     // joystick1.addButton(5, climber::armDown, climber::stopEverything);
     // joystick1.addButton(6, indexer::loadIndexer);
